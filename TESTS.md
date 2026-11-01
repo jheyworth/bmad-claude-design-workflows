@@ -61,12 +61,36 @@ These need a person at the keyboard.
 
 **Interactive bmad-ux on the Coaching path, with Design canvases.**
 
-1. In a throwaway project with BMad and the templates installed, start an initiative with `Workflow: product`. Add `forge-<slug>/forge-<slug>.md`, `brief-<slug>/brief-<slug>.md` and `prd-<slug>/prd-<slug>.md`, each with a few real lines.
-2. Run `/bmad what's next?`. Expect `bmad-ux`, Coaching path.
-3. Start `/bmad-ux` in a fresh session. Pick the Coaching path and make 3–4 real decisions: colours, type and one key screen.
-4. When it shows design directions, expect a Claude Design canvas built on the Design System, if one exists. Before Finalize there won't be one in `product`, so the canvas may stand alone.
-5. Finalize, and say yes to publishing.
-6. Check that the canvas link is in `ux-<slug>/.memlog.md`, the Design System is published, `design-system-<slug>/design-system-<slug>.md` holds its link, and `/bmad what's next?` now recommends `bmad-architecture`.
+Takes 30–45 minutes, mostly waiting: about 5 for setup, 15–25 for the conversation, and about 10 for Finalize and publishing.
+
+1. Make an empty folder, open Claude Code in it, and paste this. Change the SETUP-PROMPT.md path to where your copy of this repo is.
+
+   ```text
+   Set up a throwaway test project in this folder for testing bmad-ux interactively. Do the setup, then tell me exactly what to type.
+
+   1. Install BMad: clone https://github.com/bmad-code-org/BMAD-METHOD.git (depth 1) into .bmad-install-tmp, copy its skills/ folder contents into .claude/skills/, then run:
+      uv run --no-cache .claude/skills/bmad/scripts/setup.py --project-root "$PWD" --skill "$PWD/.claude/skills/bmad" --root "$PWD/.claude/skills"
+      Then delete .bmad-install-tmp.
+   2. Install the templates: follow every step in /path/to/bmad-sdlc-templates/SETUP-PROMPT.md (everything below its --- line). Approval is given.
+   3. Create a test initiative called "tally":
+      - _bmad/custom/config.user.toml containing [core] and active_initiative = "tally"
+      - _bmad-output/tally/tally.md with frontmatter title: Tally, then the line "Workflow: product", then: "Tally lets flatmates log shared bills and see who owes whom, settled monthly."
+      - _bmad-output/tally/forge-tally/forge-tally.md, brief-tally/brief-tally.md and prd-tally/prd-tally.md, each with 5–10 realistic lines about that app (phone-first web app, add a bill, see balances, settle up at month end).
+   4. Check setup reports no problems, then stop and tell me:
+      "Setup done. Now start a NEW session in this folder and type: /bmad-ux lets create UX design — choose the Coaching path."
+   ```
+
+2. Start a new session in that folder and type `/bmad-ux lets create UX design`. Choose the **Coaching path**.
+3. Answer its questions with anything reasonable: colours, fonts, one or two screens. Short answers keep it moving.
+4. When it shows design options, check whether it **opens a Claude Design canvas**. That's the main thing being tested.
+5. Let it Finalize, and say yes to publishing the Design System.
+6. Paste this to check the result:
+
+   ```text
+   Check this test: is there a Claude Design canvas link in _bmad-output/tally/ux-tally/.memlog.md, is there a design-system-tally/design-system-tally.md with a Design System link, and does /bmad what's next? now recommend bmad-architecture? Answer pass or fail for each.
+   ```
+
+   Three passes and it's done.
 
 **Cursor.** Paste the prompt from [install-bmad-cursor-without-npm.md](install-bmad-cursor-without-npm.md) into Cursor's agent in an empty project, then check that `/bmad` appears in a new chat.
 
