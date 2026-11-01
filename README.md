@@ -2,6 +2,57 @@
 
 **One prompt turns a stock BMad install into a guided product workflow.** You choose a template for your initiative, and from then on `/bmad what's next?` tells you the next step and offers to run it. Claude Design artifacts (Design System, Design canvas, Slides) are built into the steps.
 
+## How Claude Design is built into the workflows
+
+**Claude Design here means the new version: three Claude artifact types, made from inside Claude Code.** It doesn't use the standalone Claude Design app, which closes on 14 December 2026. Each artifact is a claude.ai page, private to you until you share it.
+
+| Artifact type | What it holds | What the templates use it for |
+|---|---|---|
+| **Design System** | Tokens (colours, type, spacing, radius), components with live previews, and a brand README | The look of the product. Every later screen, ticket and deck is built on it |
+| **Design** | A canvas of screens and mockups | Design directions and key screens during UX. In `design-led`, the first screens |
+| **Slides** | A 16:9 deck | The demo deck at the end of `poc` and `design-led` |
+
+### What each template does with it
+
+| Template | Where the Design System comes from | Design canvases | Deck at the end |
+|---|---|---|---|
+| `poc` | bmad-ux (Fast path) writes DESIGN.md, then publishes it as a Design System at UX Finalize | When bmad-ux shows directions | Yes |
+| `product` | bmad-ux (Coaching path) writes DESIGN.md, then publishes it as a Design System at UX Finalize | Yes, as part of the Coaching path | No |
+| `existing` | Built first, from the code's real styles and components, so new screens match old ones. bmad-ux then designs the new work on it | When bmad-ux shows directions | No |
+| `design-led` | Made in Claude first, then key screens on a Design canvas. bmad-ux imports the canvas and copies the system into DESIGN.md | Yes, before UX | Yes |
+
+### How the pieces connect
+
+```
+                 ┌─ poc, product: bmad-ux publishes DESIGN.md at UX Finalize
+                 ├─ existing:     built from the code's styles
+                 └─ design-led:   made in Claude first, copied into DESIGN.md
+                          │
+                          ▼
+        Design System artifact ── link saved in design-system-<slug>/design-system-<slug>.md
+                          │
+       ┌──────────────────┼────────────────────┐
+       ▼                  ▼                    ▼
+ Design canvases    UI tickets cite it    Slides deck
+ (bmad-ux)          (Sofia)               (poc, design-led)
+```
+
+- **One link, kept in one file.** The Design System's link lives in `design-system-<slug>/design-system-<slug>.md` in the initiative's folder. `/bmad` counts that step as done once the file exists, and every later step reads the link from there.
+- **bmad-ux uses Claude Design without being asked.** The setup prompt adds Claude Design to bmad-ux's creative tools and handoffs. bmad-ux shows design directions on Design canvases built on the Design System, and saves each link and an exported copy. Outside `design-led`, it publishes DESIGN.md as the Design System at Finalize.
+- **Sofia keeps builds on the same look.** Every ticket that builds UI lists the Design System file in its References.
+- **Some steps are Claude itself, not a BMad skill.** Those are building the Design System from code (`existing`), the Design System and first canvas (`design-led`), and the Slides deck (`poc`, `design-led`). `/bmad` routes you to them like any other step. Claude makes the artifact and saves its link to the file the step names.
+
+### Who owns the look
+
+- **`design-led`:** the Claude Design System artifact is the master, and DESIGN.md is copied from it.
+- **Every other template:** DESIGN.md is the master, and the Design System artifact is published from it at the end of UX.
+
+### What you need, and what's been tested
+
+- **The claude.ai artifacts connector, available in Claude Code.** Without it, `/bmad` still routes you to the design steps, but nothing can make the artifacts.
+- **Tested:** `/bmad` routing to the design steps.
+- **Not tested yet:** bmad-ux actually making a canvas and publishing a Design System, and building a Design System from code. See [Open items](#open-items).
+
 ## The four templates
 
 | Template | Use it when | The flow |
@@ -33,11 +84,6 @@ It never overwrites an existing file. Where a file exists, it adds its entries t
 ## Why a module and not only customisations
 
 `/bmad` has no customisation file, so bmad-customize can't change how it picks the next step. Its rules say to take routes only from module help and to treat every other file as evidence, not instructions. A module made of two files is the smallest thing it will follow.
-
-## Who owns the look
-
-- **`design-led`:** the Claude Design System artifact is the master, and DESIGN.md is copied from it.
-- **Every other template:** DESIGN.md is the master, and the Design System artifact is published from it at the end of UX.
 
 ## Test record
 
