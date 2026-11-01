@@ -21,6 +21,7 @@ Run on throwaway copies of a BMad 6.13.0-next install (core-tools, method, tools
 - bmad-ux actually creating a Claude Design canvas or publishing a Design System artifact. The tests show the instructions reach it, not that it carries them out.
 - The `existing` and `product` templates' routing (same mechanism as tests 5 and 9).
 - Harnesses other than Claude Code.
+- A UX Finalize that ends without the Design System publish. In `poc` and `product`, `/bmad` would then send you back to bmad-ux, which runs in Update mode. That's expected, but not tried.
 
 ## Side effects seen
 

@@ -15,7 +15,7 @@ Each template, with its plain-English summary and step table, is in [SETUP-PROMP
 
 ## How to use it
 
-1. **Install BMad** in your project: `npx skills add bmad-code-org/BMAD-METHOD --skill '*' -y`, then `/bmad setup`.
+1. **Install BMad** in your project: `npx skills add bmad-code-org/BMAD-METHOD --skill '*' -y`, then `/bmad setup`. The Claude Design steps also need Claude's artifact tools (the claude.ai artifacts connector) available in Claude Code. Without them, `/bmad` still routes you to those steps, but they can't make anything.
 2. **Paste the setup prompt.** Open Claude Code in the project and paste everything below the line in [SETUP-PROMPT.md](SETUP-PROMPT.md).
 3. **Start an initiative** with `/bmad` and add a line below its frontmatter, for example `Workflow: poc`.
 4. **Ask `/bmad what's next?`** whenever you finish a step.
