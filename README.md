@@ -50,7 +50,7 @@
 ### What you need, and what's been tested
 
 - **The claude.ai artifacts connector, available in Claude Code.** Without it, `/bmad` still routes you to the design steps, but nothing can make the artifacts.
-- **Tested:** `/bmad` routing to the design steps.
+- **Tested:** `/bmad` routing to the design steps, in all four templates.
 - **Not tested yet:** bmad-ux actually making a canvas and publishing a Design System, and building a Design System from code. See [Open items](#open-items).
 
 ## The four templates
@@ -165,6 +165,5 @@ Always test on a throwaway copy, never in a real project.
 ## Open items
 
 - **Not tested:** bmad-ux actually making a Claude Design canvas and publishing a Design System. The routing works, but the artifact side hasn't been run.
-- **Not tested:** the `existing` and `product` templates' routing.
 - **Not tested:** the `existing` template's step 2, building a Design System from code. The Design System type's instructions describe a route from a code repo through `/design-sync` in Claude Code. Whether that keeps working after standalone Claude Design closes on 14 December 2026 is unknown.
 - **Idea:** offer the templates upstream to BMAD-METHOD as a module, once they've been used on a real project.

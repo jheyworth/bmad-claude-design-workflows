@@ -15,12 +15,27 @@ Run on throwaway copies of a BMad 6.13.0-next install (core-tools, method, tools
 | 7 | The setup prompt itself, pasted headless into a fresh copy | ✅ all 5 steps done; the help file matches the prompt byte for byte; an existing `bmad-agent-po.toml` was merged, not overwritten |
 | 8 | bmad-ux picks up the override | ✅ `resolve_customization.py` shows the added creative tool, handoff and fact |
 | 9 | `/bmad what's next?` on `Workflow: design-led` with nothing done | ✅ recommended making the Design System first, not bmad-ux |
+| 10 | `/bmad what's next?` on `Workflow: product` with forge and brief done | ✅ recommended `bmad-prd` |
+| 11 | `/bmad what's next?` on `Workflow: product` with forge, brief and PRD done | ✅ recommended `bmad-ux`, Coaching path with Design canvases, and the Design System publish at Finalize |
+| 12 | `/bmad what's next?` on `Workflow: existing` with nothing done | ✅ recommended `bmad-project-context` |
+| 13 | `/bmad what's next?` on `Workflow: existing` with the BMad block in `AGENTS.md` | ✅ recommended building the Design System from the code's styles, not bmad-ux |
+
+Tests 10–13 were run on a fresh BMad install from the `main` branch, with the module files taken straight from SETUP-PROMPT.md. In tests 12 and 13, `/bmad` also warned that the test repo had no application code to learn from. That's correct, since the test project was empty.
+
+## No-npm install for Cursor
+
+The commands in [install-bmad-cursor-without-npm.md](install-bmad-cursor-without-npm.md), run directly on macOS rather than through Cursor:
+
+| # | Test | Result |
+|---|---|---|
+| 14 | Clone with `gh`, copy the skills to `.cursor/skills/`, run setup, delete the clone | ✅ 31 skills, no setup questions, `current: true`, no problems |
+| 15 | The same with plain `git clone` | ✅ same result |
 
 ## Not tested
 
 - bmad-ux actually creating a Claude Design canvas or publishing a Design System artifact. The tests show the instructions reach it, not that it carries them out.
-- The `existing` and `product` templates' routing (same mechanism as tests 5 and 9).
-- Harnesses other than Claude Code.
+- Harnesses other than Claude Code, including running the Cursor install prompt inside Cursor.
+- The Cursor install on Windows.
 - A UX Finalize that ends without the Design System publish. In `poc` and `product`, `/bmad` would then send you back to bmad-ux, which runs in Update mode. That's expected, but not tried.
 
 ## Side effects seen

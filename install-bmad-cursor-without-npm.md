@@ -61,7 +61,8 @@ Rules: do not run npx or npm. Do not delete or change anything outside .bmad-ins
 
 Tested on 2026-11-01 on macOS, by running the prompt's commands directly rather than through Cursor. Clone, copy, setup, deleting the clone and the status check all worked: 31 skills installed, setup asked no questions, and the status check reported `current: true` with no problems.
 
+The plain `git clone` fallback was tested the same way and gave the same result.
+
 Not yet tested:
 - Running the prompt inside Cursor, and Cursor loading the skills.
-- The plain `git clone` fallback.
 - Windows.
