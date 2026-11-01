@@ -44,10 +44,36 @@ One headless `/bmad-ux` run (intent `update`, run Finalize) on a `Workflow: poc`
 
 bmad-ux also added a contrast table to DESIGN.md and logged its assumptions and five open questions in the memlog, as its Finalize step should.
 
+## Design System from code (`existing`, step 2)
+
+One headless `/bmad what's next? Then run that step.` on a `Workflow: existing` initiative, with the BMad block already in `AGENTS.md`. The code was [shadcn-ui/taxonomy](https://github.com/shadcn-ui/taxonomy) at `298a885`, a Next.js app with light and dark themes as CSS variables and 37 shadcn/ui components. The request gave the answers the Design System type would normally ask for: the repo and commit, Button, Card and Badge only, static previews, and the system's name. It didn't mention the link file. The checkout was in a separate folder, read but never run, and was unchanged afterwards. It took 29 turns, about 9 minutes and $5.95.
+
+| # | Test | Result |
+|---|---|---|
+| 20 | `/bmad` runs step 2 and builds the Design System from the code | ✅ published, with all 19 colour tokens in both themes at their exact values. The repo's bare HSL values (`0 0% 100%`) were written as `hsl(0 0% 100%)`, which the page can read. Also the radius, 2 font families (Cal Sans's file copied), 7 text styles, a README with a "Not synced" note, and Button, Card and Badge with static previews. `meta` records `shadcn-ui/taxonomy`, `main@298a885`. It flagged 4 contrast failures in the repo's colours and kept the values as they are |
+| 21 | The link file is written without being asked, and `/bmad` moves on | ✅ `design-system-taxonomy/design-system-taxonomy.md` written, then `/bmad what's next?` counted step 2 done and recommended `bmad-ux` |
+
+The link file was named after the system (`taxonomy`), not the initiative (`billing`). `/bmad` still matched it, because the template only asks for `design-system-<slug>/`.
+
+## To run yourself
+
+These need a person at the keyboard.
+
+**Interactive bmad-ux on the Coaching path, with Design canvases.**
+
+1. In a throwaway project with BMad and the templates installed, start an initiative with `Workflow: product`. Add `forge-<slug>/forge-<slug>.md`, `brief-<slug>/brief-<slug>.md` and `prd-<slug>/prd-<slug>.md`, each with a few real lines.
+2. Run `/bmad what's next?`. Expect `bmad-ux`, Coaching path.
+3. Start `/bmad-ux` in a fresh session. Pick the Coaching path and make 3–4 real decisions: colours, type and one key screen.
+4. When it shows design directions, expect a Claude Design canvas built on the Design System, if one exists. Before Finalize there won't be one in `product`, so the canvas may stand alone.
+5. Finalize, and say yes to publishing.
+6. Check that the canvas link is in `ux-<slug>/.memlog.md`, the Design System is published, `design-system-<slug>/design-system-<slug>.md` holds its link, and `/bmad what's next?` now recommends `bmad-architecture`.
+
+**Cursor.** Paste the prompt from [install-bmad-cursor-without-npm.md](install-bmad-cursor-without-npm.md) into Cursor's agent in an empty project, then check that `/bmad` appears in a new chat.
+
 ## Not tested
 
 - bmad-ux making Claude Design artifacts in an interactive run, or on the Coaching path. Tests 16–19 used a headless Finalize.
-- Building a Design System from code (`existing`, step 2).
+- Building a Design System from code with built, live component previews. Test 20 used the read-only route.
 - How the published Design System and canvas look on the page. Tests 17–18 checked the files, not the rendering.
 - Harnesses other than Claude Code, including running the Cursor install prompt inside Cursor.
 - The Cursor install on Windows.

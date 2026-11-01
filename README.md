@@ -16,7 +16,7 @@
 
 | Template | Where the Design System comes from | Design canvases | Deck at the end |
 |---|---|---|---|
-| `poc` | bmad-ux (Fast path) writes DESIGN.md, then publishes it as a Design System at UX Finalize | When bmad-ux shows directions | Yes |
+| `poc` | bmad-ux (Fast path) writes DESIGN.md, then publishes it as a Design System at UX Finalize | Key screens at Finalize only. The Fast path skips design directions | Yes |
 | `product` | bmad-ux (Coaching path) writes DESIGN.md, then publishes it as a Design System at UX Finalize | Yes, as part of the Coaching path | No |
 | `existing` | Built first, from the code's real styles and components, so new screens match old ones. bmad-ux then designs the new work on it | When bmad-ux shows directions | No |
 | `design-led` | Made in Claude first, then key screens on a Design canvas. bmad-ux imports the canvas and copies the system into DESIGN.md | Yes, before UX | Yes |
@@ -51,8 +51,9 @@
 
 - **The claude.ai artifacts connector, available in Claude Code.** Without it, `/bmad` still routes you to the design steps, but nothing can make the artifacts.
 - **Tested:** `/bmad` routing to the design steps in all four templates. Also bmad-ux finalizing a `poc` design: it published the Design System, made a Design canvas built on it, saved the link file, and `/bmad` then moved on to architecture. See [TESTS.md](TESTS.md), tests 16–19.
-- **Headless runs need creative tools turned on.** bmad-ux leaves creative tools off when run headless (`claude -p`), so it won't make canvases unless the request says to. Interactive runs aren't affected.
-- **Not tested yet:** building a Design System from code. See [Open items](#open-items).
+- **Headless runs need creative tools turned on.** bmad-ux leaves creative tools off when run headless (`claude -p`), so it won't make canvases unless the request says to. The Design System is still published either way.
+- **Also tested:** building a Design System from a real codebase for `existing`. Claude read the code, published the system, and saved the link file without being told to. See [TESTS.md](TESTS.md), tests 20–21.
+- **Not tested yet:** an interactive bmad-ux run on the Coaching path. [TESTS.md](TESTS.md) has the steps to run it yourself.
 
 ## The four templates
 
@@ -165,5 +166,6 @@ Always test on a throwaway copy, never in a real project.
 
 ## Open items
 
-- **Not tested:** the `existing` template's step 2, building a Design System from code. The Design System type's instructions describe a route from a code repo through `/design-sync` in Claude Code. Whether that keeps working after standalone Claude Design closes on 14 December 2026 is unknown.
+- **Don't use `/design-sync` for the `existing` template's step 2.** It syncs to standalone Claude Design projects (claude.ai/design), which close by 14 December 2026. Use the route tests 20–21 used instead: Claude reads the code and publishes a Design System artifact directly.
+- **Not tested:** an interactive bmad-ux run on the Coaching path. See "To run yourself" in [TESTS.md](TESTS.md).
 - **Idea:** offer the templates upstream to BMAD-METHOD as a module, once they've been used on a real project.
