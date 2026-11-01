@@ -31,9 +31,24 @@ The commands in [install-bmad-cursor-without-npm.md](install-bmad-cursor-without
 | 14 | Clone with `gh`, copy the skills to `.cursor/skills/`, run setup, delete the clone | ✅ 31 skills, no setup questions, `current: true`, no problems |
 | 15 | The same with plain `git clone` | ✅ same result |
 
+## bmad-ux and Claude Design
+
+One headless `/bmad-ux` run (intent `update`, run Finalize) on a `Workflow: poc` initiative with the forge step done and a small draft DESIGN.md and EXPERIENCE.md. Creative tools were turned on in the request, because bmad-ux leaves them off when headless. The Reviewer Gate and the polish pass were skipped to keep the run short. It took 29 turns, about 8 minutes and $3.35.
+
+| # | Test | Result |
+|---|---|---|
+| 16 | bmad-ux picks up the Claude Design overrides | ✅ `resolve_customization.py` lists the added creative tool, design handoff and external handoff |
+| 17 | Finalize publishes DESIGN.md as a Design System artifact | ✅ published, and both spines set to `status: final`. `project/tokens.json` uses the list shape (`{"tokens":[…]}`, with `color.themes`). It holds 8 colours, 4 text styles, 4 spacing steps and 2 radii, with a README, 3 components and a cover. The link was written to `design-system-tally/design-system-tally.md` |
+| 18 | Key screens are made on a Design canvas built on that system | ✅ a canvas with Home and Add bill. Its `canvas.json` names the Tally Design System artifact and the version it copied. An exported copy was saved under `.working/design-canvas/`, and HTML mocks were promoted to `mockups/` |
+| 19 | `/bmad what's next?` afterwards | ✅ counted UX and the Design System as done and recommended `bmad-architecture`, Fast path |
+
+bmad-ux also added a contrast table to DESIGN.md and logged its assumptions and five open questions in the memlog, as its Finalize step should.
+
 ## Not tested
 
-- bmad-ux actually creating a Claude Design canvas or publishing a Design System artifact. The tests show the instructions reach it, not that it carries them out.
+- bmad-ux making Claude Design artifacts in an interactive run, or on the Coaching path. Tests 16–19 used a headless Finalize.
+- Building a Design System from code (`existing`, step 2).
+- How the published Design System and canvas look on the page. Tests 17–18 checked the files, not the rendering.
 - Harnesses other than Claude Code, including running the Cursor install prompt inside Cursor.
 - The Cursor install on Windows.
 - A UX Finalize that ends without the Design System publish. In `poc` and `product`, `/bmad` would then send you back to bmad-ux, which runs in Update mode. That's expected, but not tried.
