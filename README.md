@@ -2,6 +2,38 @@
 
 **One prompt turns a stock BMad install into a guided product workflow.** You choose a template for your initiative, and from then on `/bmad what's next?` tells you the next step and offers to run it. Claude Design artifacts (Design System, Design canvas, Slides) are built into the steps.
 
+## What this adds to standard BMad
+
+The setup prompt doesn't change BMad itself. It adds three small files to a standard install: one template module and two override files.
+
+- **A set route, not a fresh guess each time**
+  - **Standard:** `/bmad what's next?` picks a next step from the skills you have installed.
+  - **With the templates:** it follows the template named in the initiative file (`poc`, `product`, `existing` or `design-led`).
+  - **How it knows where you are:** each step is done once its output file exists, so the next step is the first one whose file is missing.
+- **The look goes to Claude Design at the end of UX**
+  - **Standard:** bmad-ux writes DESIGN.md and EXPERIENCE.md and keeps the mockups as local HTML files.
+  - **With the templates:** at Finalize, bmad-ux also:
+    - publishes DESIGN.md as a **Claude Design System** (tokens, components and a brand README);
+    - puts every accepted mockup on one **Claude Design canvas** built on that system;
+    - saves both links in the project, where later steps read them.
+- **Every later step builds on the same Design System**
+  - **Tickets:** Sofia lists the Design System in every ticket that builds UI.
+  - **Decks:** the Slides deck at the end of `poc` and `design-led` is built on it.
+  - **Existing code:** in `existing`, the Design System is built first, from the code's real styles, so new screens match old ones.
+- **Design-first projects get their own order**
+  - **`design-led`:** the Design System and canvas are made in Claude first.
+  - **DESIGN.md is copied from them**, not the other way round.
+- **Two small extras**
+  - **Sofia keeps the `Workflow:` line** whenever she edits the initiative file, so the route isn't lost.
+  - **Claude Design joins Google Stitch** as a design handoff option in bmad-ux.
+
+## What stays the same
+
+- **Every BMad skill works as before.** No skill files are edited, and BMad updates don't remove the templates.
+- **bmad-ux still shows you options as local HTML pages** in your browser while you design.
+- **DESIGN.md still owns the look** in every template except `design-led`.
+- **Without the claude.ai artifacts connector**, `/bmad` still follows the route, but the Claude Design steps can't make anything.
+
 ## How Claude Design is built into the workflows
 
 **Claude Design here means the new version: three Claude artifact types, made from inside Claude Code.** It doesn't use the standalone Claude Design app, which closes on 14 December 2026. Each artifact is a claude.ai page, private to you until you share it.
