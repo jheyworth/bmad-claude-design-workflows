@@ -1,45 +1,72 @@
 # Claude Design workflows for BMad
 
-*Workflow templates that take a BMad project from idea to build, with the look published to Claude Design.*
+*See your product's design, not just read about it. Claude Design built into BMad's UX process, with a guided, step-by-step workflow.*
 
-**One BMad module turns a standard BMad install into a guided product workflow.** You pick a template, `/bmad what's next?` walks you through it step by step, and the product's look is published to Claude Design for every later step to build on.
+**Claude Design workflows is an add-on for [BMad](https://github.com/bmad-code-org/BMAD-METHOD).** You install it into a project that already has BMad, like any other BMad module.
 
-## Which Claude plans it works on
+## Why use it
 
-| Your Claude plan | Templates and `/bmad` routing | Design published to Claude Design |
+- **You see the design, not just read it**
+  - **Standard BMad** ends UX with written documents: DESIGN.md and EXPERIENCE.md.
+  - **With Claude Design workflows**, bmad-ux (BMad's UX skill) publishes the look as a **Claude Design System**: colours, type, spacing and components, with live previews.
+  - **The key screens** go on a **Claude Design canvas**, built on that system.
+  - **Made for visual people:** product owners, designers and stakeholders can look at it, comment on it and share it.
+- **Claude Design is the design tool**
+  - **It runs inside Claude Code.** No Google Stitch or other outside tool needed.
+  - **In `design-led`**, you start in Claude Design and BMad builds from it.
+- **One design, used everywhere**
+  - **Tickets:** Sofia (BMad's product-owner agent) cites the Design System in every UI ticket.
+  - **Builds:** each story is built against it.
+  - **Demo decks:** Claude Slides decks are built on it.
+- **A guided workflow:** `/bmad what's next?` tells you the next step, every time, in a fixed order.
+- **Four templates**, one per kind of project:
+  - **`poc`:** test one idea, fast.
+  - **`product`:** a full product several people must agree on.
+  - **`existing`:** add to code that already exists. The Design System is built from the code's real styles.
+  - **`design-led`:** the look comes first.
+
+## Will it work for you?
+
+| Your Claude plan | Templates and routing | Published to Claude Design |
 |---|---|---|
 | **Pro, Max, Ultra** | ✅ | ✅ |
-| **Team, Enterprise** | ✅ | ✅ unless your admin has turned artifacts off |
-| **Claude API** (an API key, a company gateway, Amazon Bedrock, Google Cloud or Microsoft Foundry) | ✅ | ❌ |
+| **Team, Enterprise** | ✅ | ✅ unless your admin turned artifacts off |
+| **Claude API** (API key, gateway, Bedrock, Google Cloud, Foundry) | ✅ | ❌ |
 
-**❌ means you still get the whole workflow, without the publishing.** The design lives in DESIGN.md and local HTML mockups, and every later step uses those. The `design-led` template is the exception: it starts in Claude Design, so it needs a ✅ plan.
+- **❌ still gets the whole workflow**
+  - The design stays in DESIGN.md and local mockups.
+  - Every later step uses those instead. [How that works](#if-you-cant-publish-artifacts)
+  - **Except `design-led`:** it starts in Claude Design, so it needs ✅.
+- **✅ has two catches**
+  - **Sign in with your Claude account** (`/login`), not an API key.
+  - **Team and Enterprise:** an admin can turn artifacts off. [All conditions](#claude-design-explained)
 
-**Two catches on Pro to Enterprise:** sign in to Claude Code with your Claude account, not an API key, and check that your organization hasn't switched artifacts off. Some Enterprise setups can't have them at all. [Full details](#claude-plans-and-claude-design).
+## Install
 
-## Quick start
+- **You need:** Node.js (for `npx`) and [uv](https://docs.astral.sh/uv/) (BMad's setup runs on it).
 
-0. **Check your plan** in [Which Claude plans it works on](#which-claude-plans-it-works-on). On a Claude API plan, everything below still works, but nothing is published to Claude Design.
-1. **Install BMad** in your project: `npx skills add bmad-code-org/BMAD-METHOD --skill '*' -y`, then `/bmad setup`.
-2. **Install the templates:**
+1. **Install BMad**, then run `/bmad setup` in Claude Code:
+
+   ```
+   npx skills add bmad-code-org/BMAD-METHOD -y
+   ```
+
+2. **Install Claude Design workflows** (the templates and the Claude Design steps), then run `/bmad setup` again:
 
    ```
    npx skills add jheyworth/bmad-claude-design-workflows -y
    ```
 
-   Then run `/bmad setup` in Claude Code. It offers one migration, "Add the Claude Design steps to bmad-ux and Sofia". Say yes: it shows both files it will write and asks before saving.
-3. **Start an initiative** with `/bmad`, and add a line below its frontmatter naming a template, for example `Workflow: poc`. The templates are in [Pick a template](#pick-a-template).
-4. **Ask `/bmad what's next?`** whenever you finish a step.
+   - **Setup offers to add the Claude Design steps** to bmad-ux and Sofia.
+   - **Say yes.** It shows the two files first and asks before saving.
 
-**Maintainers:** see [Working on this](#working-on-this) at the bottom.
+3. **Start your project.** In Claude Code, type `/bmad start a new initiative called <name>`.
+   - **An initiative** is BMad's word for one piece of work, such as a new app or a feature.
+4. **Ask `/bmad what's next?`**
+   - **The first time**, it describes the four templates and asks which fits. Pick one and it records it for you.
+   - **After that**, it tells you the next step every time you ask.
 
-## The problem it solves
-
-- **Standard BMad leaves the route to you**
-  - **`/bmad what's next?` suggests a step** from the skills you have installed, using its own judgement each time.
-  - **Nothing fixes the order**, so two projects of the same kind can take different routes.
-- **The design stays on your machine**
-  - **bmad-ux writes DESIGN.md and EXPERIENCE.md** and keeps its mockups as local HTML files.
-  - **Nothing is published** for tickets, builds or decks to point to.
+**Changing the add-on itself?** See [For maintainers](#for-maintainers-changing-claude-design-workflows).
 
 ## Pick a template
 
@@ -65,7 +92,7 @@ Using `product` as the example:
 3. **You work through the early steps**: forge the idea, write the brief, then the PRD.
 4. **bmad-ux designs the look and behaviour with you.**
    - **While you design**, it shows options as local HTML pages in your browser.
-   - **At Finalize**, it publishes DESIGN.md as a **Claude Design System**.
+   - **When it finishes**, it publishes DESIGN.md as a **Claude Design System**.
    - **Then it puts every accepted mockup on one Claude Design canvas** built on that system.
    - **Both links are saved in the project**, where later steps find them.
 5. **Architecture, then tickets.** Sofia lists the Design System in every ticket that builds UI.
@@ -80,43 +107,42 @@ Using `product` as the example:
                                           (Sofia)              (poc, design-led)
 ```
 
-## Claude Design at each step
+## Claude Design, explained
 
-**Claude Design here means three Claude artifact types, made from inside Claude Code.** Each is a claude.ai page, private to you until you share it. The standalone Claude Design app, which closes on 14 December 2026, isn't used.
-
-- **The three artifact types**
-  - **Design System:** tokens (colours, type, spacing, radius), components with live previews, and a brand README. It's the look every later step builds on.
-  - **Design:** a canvas of screens. It holds the accepted key screens.
-  - **Slides:** a 16:9 deck. It's the demo deck at the end of `poc` and `design-led`.
-- **Where the Design System comes from, per template**
-  - **`poc` and `product`:** bmad-ux publishes it from DESIGN.md at Finalize, then makes the canvas.
-  - **`existing`:** Claude builds it first, from the code's real styles and components, so new screens match old ones. bmad-ux makes the canvas at Finalize.
-  - **`design-led`:** you make the Design System and a canvas in Claude first. bmad-ux then imports them.
+- **What it is:** three Claude artifact types, made from inside Claude Code.
+  - Each is a claude.ai page, private to you until you share it.
+  - The standalone Claude Design app (closing 14 December 2026) isn't used.
+- **The three types**
+  - **Design System:** tokens (colours, type, spacing, radius), components and a brand README. The look every later step builds on.
+  - **Design:** a canvas of the key screens.
+  - **Slides:** a 16:9 demo deck, at the end of `poc` and `design-led`.
 - **Who owns the look**
-  - **`design-led`:** the Design System is the master, and DESIGN.md is copied from it.
-  - **Every other template:** DESIGN.md is the master, and the Design System is published from it.
+  - **`design-led`:** the Design System. You make it in Claude first; DESIGN.md is copied from it.
+  - **Every other template:** DESIGN.md. The Design System is published from it.
+  - **In `existing`**, the Design System is built first, from the code's real styles, so new screens match old ones.
 - **Where the links live**
-  - **Design System:** `design-system-<slug>/design-system-<slug>.md` in the initiative's folder. `/bmad` counts that step as done once the file exists.
-  - **Canvas:** a `Canvas:` line in `ux-<slug>/ux-<slug>.md`, and the memlog.
-- **Some steps are Claude, not a BMad skill**
-  - **Which ones:** the Design System from code (`existing`), the first Design System and canvas (`design-led`), and the Slides deck.
-  - **How they run:** `/bmad` routes you to them like any other step. Claude makes the artifact and saves its link where the step says.
+  - **Design System:** `design-system-<slug>/design-system-<slug>.md` in the initiative's folder. `/bmad` counts the step done once it exists.
+  - **Canvas:** a `Canvas:` line in `ux-<slug>/ux-<slug>.md`.
+- **Some steps are Claude, not a BMad skill:** the Design System from code, the first Design System in `design-led`, and the Slides deck. `/bmad` routes you to them like any other step.
 
-## Claude plans and Claude Design
+### When you can publish
 
-The Claude Design steps publish claude.ai artifacts. Artifacts are built into Claude Code, so there's nothing to install or connect. They're on when all of these hold ([Claude Code artifacts docs](https://code.claude.com/docs/en/artifacts)):
+Artifacts are built into Claude Code: nothing to install. They're on when all of these hold ([docs](https://code.claude.com/docs/en/artifacts)):
 
-- **Your plan** is Pro, Max, Ultra, Team or Enterprise.
-- **You sign in to Claude Code with your Claude account.** Run `/login` and choose your claude.ai account, usually through your company's single sign-on on Team and Enterprise. Claude Code signed in with an API key, a gateway token, or Amazon Bedrock, Google Cloud or Microsoft Foundry credentials can't publish, even if your company also has an Enterprise plan.
-- **On Team and Enterprise, your organization allows them.**
-  - An Owner hasn't turned artifacts off in [Organization settings → Artifacts](https://claude.ai/admin-settings/artifacts). They're on by default.
-  - The organization doesn't use customer-managed encryption keys (CMEK), HIPAA or Zero Data Retention. Artifacts aren't available with any of these.
-  - Claude Code can reach `api.anthropic.com` to load the organization's policy. If it can't, artifacts are off.
-- **Claude Code is v2.1.281 or later.** Check with `claude --version`, upgrade with `claude update`.
-- **Artifacts aren't switched off on your machine.** The **Artifacts** row in `/config` is on, and neither `CLAUDE_CODE_DISABLE_ARTIFACT` nor `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set.
-- **If artifacts are missing in a script, run the design steps in a normal Claude Code session.** The docs say artifacts are off by default under `claude -p` and the Agent SDK, though they were on in this project's `claude -p` tests.
+- **Plan:** Pro, Max, Ultra, Team or Enterprise.
+- **Sign-in:** your Claude account via `/login`, usually your company's single sign-on.
+  - **Can't publish:** an API key, a gateway token, or Bedrock, Google Cloud or Foundry credentials, even if your company has an Enterprise plan.
+- **Team and Enterprise:** your organization allows them.
+  - An Owner hasn't turned them off in [Organization settings → Artifacts](https://claude.ai/admin-settings/artifacts). On by default.
+  - No customer-managed encryption keys (CMEK), HIPAA or Zero Data Retention.
+  - Claude Code can reach `api.anthropic.com` to load the policy.
+- **Version:** Claude Code v2.1.281 or later (`claude --version`, `claude update`).
+- **Not switched off locally**
+  - The **Artifacts** row in `/config` is on.
+  - Neither `CLAUDE_CODE_DISABLE_ARTIFACT` nor `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set.
+- **Session:** run the design steps in a normal Claude Code session.
 
-**What happens without artifacts**
+## If you can't publish artifacts
 
 - **bmad-ux works as usual.** It writes DESIGN.md and EXPERIENCE.md and shows its mockups as local HTML pages.
 - **Each Claude Design step writes its link file with a note instead of a link:** `Not published: Claude artifacts aren't available in this session. DESIGN.md is the source of the look.` That counts as done, so `/bmad what's next?` moves on to architecture.
@@ -124,33 +150,24 @@ The Claude Design steps publish claude.ai artifacts. Artifacts are built into Cl
 - **You can publish later.** On a plan with artifacts, run the step again and the note is replaced with a link.
 - **`design-led` isn't available.** It starts in Claude Design, so `/bmad` suggests `product` or `poc` instead.
 
-## What it changes in your project
+## What it adds to your project
 
-- **One module is installed** with `npx skills add`, like any other BMad module.
-  - **`bmod-claude-design-workflows/`** (`SKILL.md`, `bmod.toml`, `help/help.md` and `migration-1.toml`): the templates and the overrides. A module record with no skills and no code.
-- **Two override files are written** by the module's migration, which `/bmad setup` offers. It never overwrites a file. Where one exists, it adds its entries to it, and on a later run it replaces only its own.
-  - **`_bmad/custom/bmad-ux.toml`:** has bmad-ux publish the Design System and canvas at Finalize, and adds Claude Design as a handoff option alongside Google Stitch.
+- **One module**, installed with `npx skills add` like any other BMad module.
+  - **`bmod-claude-design-workflows/`** holds the templates (`help/help.md`), the version (`bmod.toml`) and the Claude Design steps (`migration-1.toml`). It has no skills and no code, and doesn't appear in the `/` menu.
+- **Two override files**, written when you say yes during `/bmad setup`. Neither replaces a file: where one exists, its entries are added to it, and a later run replaces only its own.
+  - **`_bmad/custom/bmad-ux.toml`:** has bmad-ux publish the Design System and canvas when it finishes, and adds Claude Design as a handoff option alongside Google Stitch.
   - **`_bmad/custom/bmad-agent-po.toml`:** has Sofia keep the `Workflow:` line and list the Design System in UI tickets.
   - **Every entry starts with `[claude-design-workflows]`**, so you can see which lines came from this module.
 - **Everything else stays the same**
   - **No BMad skill is edited**, and BMad updates don't remove the templates.
-  - **`/bmad update` updates the templates** along with BMad. When the module's override text has changed, it offers the migration again; say yes.
+  - **`/bmad update` updates the templates** along with BMad. If the Claude Design steps have changed, it offers them again; say yes.
   - **bmad-ux still shows options as local HTML pages** while you design.
-
-## What's been tested
-
-- **Install:** `npx skills add` from this repo installs the module, and `/bmad setup` offers its migration, which writes each override once and replaces only its own entries on a later run.
-- **Routing:** `/bmad what's next?` picks the right step in all four templates.
-- **A full interactive run:** a person took `product` through UX, architecture and tickets. The Design System was published and the epics cite it.
-- **The canvas at Finalize:** all 12 accepted mockups went onto one canvas built on the Design System.
-- **Design System from code:** built from a real public codebase for `existing`, in both themes, at the code's exact values.
-- **Details, and what's not tested yet:** [TESTS.md](TESTS.md).
 
 ---
 
-# Working on this
+# For maintainers: changing Claude Design workflows
 
-Everything you need to change the templates and test them again.
+You only need this part if you're changing the templates or the Claude Design steps in this repo. Using them doesn't need any of it.
 
 ## How it works
 
@@ -171,11 +188,13 @@ Everything you need to change the templates and test them again.
 - **The other skills are steered by override files.** bmad-ux and Sofia read `_bmad/custom/<skill>.toml` when they start. In those files, lists are added to the defaults and single values replace them.
 - **Required steps go in `external_handoffs`, not `creative_tools`.** bmad-ux always runs its Finalize handoffs, but in a live session it always picked its own HTML tools over an added creative tool (test 22).
 
-## Why a module and not only customisations
+## Why a module, and why a migration
 
 `/bmad` has no customisation file, so bmad-customize can't change how it picks the next step. Its rules say to take routes only from module help and to treat every other file as evidence, not instructions. A module record with only a help file is the smallest thing it will follow.
 
-The overrides can't ship inside the module. A skill's customisation comes from exactly three files: its own `customize.toml`, then `_bmad/custom/<skill>.toml`, then `_bmad/custom/<skill>.user.toml`. So the module ships them as a BMad migration (`migration-1.toml`). `/bmad setup` and `/bmad update` check each installed module's migrations, offer the ones whose `detect` matches the project, and on a yes follow its `guide` and `checklist`. Ours matches when the `[claude-design-workflows]` entries are missing or differ from the file's.
+A module can't set another skill's customisation directly. A skill's customisation comes from exactly three files: its own `customize.toml`, then `_bmad/custom/<skill>.toml`, then `_bmad/custom/<skill>.user.toml`. So the module ships a BMad migration (`migration-1.toml`) that writes its entries into `_bmad/custom/`. `/bmad setup` and `/bmad update` check each installed module's migrations, offer the ones whose `detect` matches the project, and on a yes follow its `guide` and `checklist`. Ours matches when the `[claude-design-workflows]` entries are missing or differ from the file's.
+
+The record's `SKILL.md` sets `user-invocable: false` and `disable-model-invocation: true`, so it stays out of the `/` menu and Claude never loads it as a skill. BMad only checks that the file exists.
 
 ## Where the source of truth lives
 
@@ -207,7 +226,8 @@ Paths are inside a BMad install (`.claude/skills/` or `.agents/skills/`).
 | File | Why it matters |
 |---|---|
 | `bmad/SKILL.md`, `bmad/references/help.md` | How `/bmad` answers: routes only from module help |
-| `bmad/scripts/knowledge.py` | What counts as a module record and a help document |
+| `bmad/scripts/knowledge.py` | What counts as a module record, a help document and a migration |
+| `bmad/references/migrate.md` | How `/bmad` runs a module's migration |
 | `_bmad/scripts/setup.py` | What setup checks: `update_source`, the scripts folder, retired names |
 | `bmod-*/retired.toml` | Skill names setup will delete |
 | `bmad-ux/SKILL.md`, `bmad-ux/customize.toml` | bmad-ux's plug-in points: `creative_tools`, `design_handoffs`, `external_handoffs` |
@@ -218,7 +238,7 @@ Paths are inside a BMad install (`.claude/skills/` or `.agents/skills/`).
 Always test on a throwaway copy, never in a real project.
 
 1. **Push the change to a branch**, then make a fresh BMad install in a temporary folder (`npx skills add bmad-code-org/BMAD-METHOD -y`). Run `git init` and commit, so you can see what changes.
-2. **Install from the branch:** `npx skills add 'jheyworth/bmad-claude-design-workflows#<branch>' -y`, then `claude -p "/bmad setup"` and answer its migration offer with `claude -p "yes" --resume <session id>`, and the same for its save question.
+2. **Install from the branch:** `npx skills add 'jheyworth/bmad-claude-design-workflows#<branch>' -y`. Then run `claude -p "/bmad setup" --output-format json`, take `session_id` from its output, and answer its offer with `claude -p "yes" --resume <session_id>`, and the same for its save question.
 3. **Check setup:** `uv run _bmad/scripts/setup.py --project-root . --skill .claude/skills/bmad --root .claude/skills --status` must show `"problems": []`.
 4. **Check the overrides:** `uv run _bmad/scripts/resolve_customization.py --skill .claude/skills/bmad-ux --project-root . --key workflow` must show each `[claude-design-workflows]` entry once. Run `/bmad setup` again and check it offers nothing.
 5. **Check the help is found:** `uv run _bmad/scripts/knowledge.py --root .claude/skills` must list `claude-design-workflows`.

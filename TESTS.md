@@ -124,6 +124,7 @@ No permission prompt came up: nothing is fetched from outside the project.
 | # | Test | Result |
 |---|---|---|
 | 44 | 0.6.1: the record's `SKILL.md` gets `user-invocable: false` and `disable-model-invocation: true`. Fresh install from the `hide-record` branch | ✅ `bmod-claude-design-workflows` is in neither `slash_commands` nor `skills` of Claude Code's startup event (BMad's own `bmod-*` records still are). Setup `"problems": []` at 0.6.1, `knowledge.py` still lists the help and the migration, and `validate_manifests.py` passes |
+| 45 | The README's steps 3–4 as a user types them, in one session: `/bmad start a new initiative called tally`, then `/bmad what's next?`, then `poc` | ✅ created `initiative-tally/initiative-tally.md` and set it active. With no `Workflow:` line, `/bmad what's next?` showed all four templates with plain-English summaries, said `design-led` was available because the session could publish artifacts, recommended `poc`, and offered to add the line. After `poc`, it wrote `Workflow: poc` below the frontmatter and recommended `bmad-forge-idea`, step 1 of 8. $1.50 in total |
 
 Before the branch, a hand-written record listing the setup skill as a member, with that skill not installed, gave `absent_skills: ["claude-design-workflows-setup"]` and `absent_install: "npx skills add jheyworth/bmad-claude-design-workflows --skill claude-design-workflows-setup"`. That's why the setup skill is kept out of the record's `skills` list.
 
