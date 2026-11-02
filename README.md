@@ -6,8 +6,16 @@
 
 ## Quick start
 
+0. **Check Claude Code can make artifacts.** The Claude Design steps publish claude.ai artifacts. Artifacts are built into Claude Code, so there's nothing to install or connect, but they're only on when all of these hold:
+   - **Plan:** Pro, Max, Ultra, Team or Enterprise.
+   - **Sign-in:** run `/login` and sign in with your claude.ai account. An API key, gateway token, or Bedrock, Google Cloud or Foundry credentials can't publish.
+   - **Version:** Claude Code v2.1.281 or later. Check with `claude --version`, upgrade with `claude update`.
+   - **Team and Enterprise:** an Owner hasn't turned artifacts off in [Organization settings → Artifacts](https://claude.ai/admin-settings/artifacts).
+   - **Not switched off on your machine:** the **Artifacts** row in `/config` is on, and neither `CLAUDE_CODE_DISABLE_ARTIFACT` nor `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set.
+   - **An interactive session:** artifacts are off by default under `claude -p` and the Agent SDK, so run the design steps in a normal Claude Code session.
+
+   Without artifacts, `/bmad` still follows the route, but the Claude Design steps can't make anything. Details: [Claude Code artifacts](https://code.claude.com/docs/en/artifacts).
 1. **Install BMad** in your project: `npx skills add bmad-code-org/BMAD-METHOD --skill '*' -y`, then `/bmad setup`.
-   - **For the Claude Design steps:** you also need the claude.ai artifacts connector in Claude Code. Without it, `/bmad` still follows the route, but those steps can't make anything.
 2. **Install the templates:** `npx skills add jheyworth/bmad-claude-design-workflows --skill bmod-claude-design-workflows -y`, then `/bmad setup` again.
    - Keep `--skill bmod-claude-design-workflows`. Without it, the setup skill from step 3 is installed too and stays installed.
 3. **Add the Claude Design steps** to bmad-ux and Sofia. This runs the setup skill straight from GitHub, without installing it:
