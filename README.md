@@ -156,7 +156,7 @@ The overrides can't ship inside the module. A skill's customisation comes from e
 | How Sofia treats the `Workflow:` line or Design System links | The `bmad-agent-po.toml` block in the same file |
 | Another skill's behaviour | Add a section for a new `_bmad/custom/<skill>.toml` to the same file |
 
-On every release, bump `version` in [skills/bmod-claude-design-workflows/bmod.toml](skills/bmod-claude-design-workflows/bmod.toml). `/bmad update` only sees a new release when that number changes.
+On every release, bump `version` in [skills/bmod-claude-design-workflows/bmod.toml](skills/bmod-claude-design-workflows/bmod.toml). `/bmad update` only sees a new release when that number changes. It reads the number from GitHub `main`, which can take about 5 minutes to show a push, and only while the repo is public.
 
 ## Rules to keep
 

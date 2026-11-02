@@ -82,6 +82,7 @@ After merging to `main` and making the repo public:
 | # | Test | Result |
 |---|---|---|
 | 32 | The Quick start as written, from `main`, in a fresh project | ✅ only the record installed, setup `"problems": []`, and the `skills use` pipe wrote each override once (8 turns, $0.32). While the repo was private, the version check got a 404 from `raw.githubusercontent.com`; once public, it reported `current` at 0.4.0 |
+| 33 | `version` bumped to 0.4.1 on `main`, then the same project checked again | ✅ after about 5 minutes (GitHub's raw-file cache), `--status` reported `newer-available` 0.4.1 with `next: npx skills update`. `npx skills update -p -y` updated only `bmod-claude-design-workflows`; setup then reported 0.4.1, `"problems": []` and the `post_install_message`. Both `_bmad/custom/` files were byte-identical afterwards |
 
 Before the branch, a hand-written record listing the setup skill as a member, with that skill not installed, gave `absent_skills: ["claude-design-workflows-setup"]` and `absent_install: "npx skills add jheyworth/bmad-claude-design-workflows --skill claude-design-workflows-setup"`. That's why the setup skill is kept out of the record's `skills` list.
 
@@ -124,7 +125,6 @@ Takes 30–45 minutes, mostly waiting: about 5 for setup, 15–25 for the conver
 
 ## Not tested
 
-- `/bmad update` finding a new version of the module. Its version check reads `bmod.toml` from GitHub `main`, so on the branch it reports `could-not-check` (404).
 - The `/bmad` agent itself on the new install: tests 25–31 called BMad's scripts directly, so they don't show `/bmad setup` relaying the `post_install_message`.
 - A full template run with the module installed through npx. The help and override text are unchanged from tests 22–24.
 
