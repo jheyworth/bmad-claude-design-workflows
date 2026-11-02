@@ -225,9 +225,9 @@ Always test on a throwaway copy, never in a real project.
 4. **Check the overrides:** `uv run _bmad/scripts/resolve_customization.py --skill .claude/skills/bmad-ux --project-root . --key workflow` must show each `[claude-design-workflows]` entry once. Run step 2's setup command again and check it still does.
 5. **Check the help is found:** `uv run _bmad/scripts/knowledge.py --root .claude/skills` must list `claude-design-workflows`.
 6. **Check the routing:**
-   - Set `active_initiative` in `_bmad/custom/config.user.toml`.
-   - Make `_bmad-output/<initiative>/<initiative>.md` with a `Workflow:` line.
-   - Add the outputs of the steps you want to count as done.
+   - Make `_bmad-output/initiative-<slug>/initiative-<slug>.md` with frontmatter `type: initiative`, `title` and `parent: none`, then a `Workflow:` line below it. That's the name and folder `/bmad` uses when it creates an initiative.
+   - Set `active_initiative = "initiative-<slug>"` under `[core]` in `_bmad/custom/config.user.toml`. It names the folder.
+   - Add the outputs of the steps you want to count as done, inside that folder.
    - Run `claude -p "/bmad what's next? Recommend only; do not run anything."` and check it names the right step.
 7. **Record the result** in [TESTS.md](TESTS.md).
 

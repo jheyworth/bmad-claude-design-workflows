@@ -117,9 +117,9 @@ Takes 30–45 minutes, mostly waiting: about 5 for setup, 15–25 for the conver
       Then delete .bmad-install-tmp.
    2. Install the templates: run `npx skills add jheyworth/bmad-claude-design-workflows --skill bmod-claude-design-workflows -y`, run the setup.py command above again, then run `npx skills use jheyworth/bmad-claude-design-workflows@claude-design-workflows-setup` and follow what it prints. Approval is given.
    3. Create a test initiative called "tally":
-      - _bmad/custom/config.user.toml containing [core] and active_initiative = "tally"
-      - _bmad-output/tally/tally.md with frontmatter title: Tally, then the line "Workflow: product", then: "Tally lets flatmates log shared bills and see who owes whom, settled monthly."
-      - _bmad-output/tally/forge-tally/forge-tally.md, brief-tally/brief-tally.md and prd-tally/prd-tally.md, each with 5–10 realistic lines about that app (phone-first web app, add a bill, see balances, settle up at month end).
+      - _bmad/custom/config.user.toml containing [core] and active_initiative = "initiative-tally"
+      - _bmad-output/initiative-tally/initiative-tally.md with frontmatter type: initiative, title: Tally and parent: none, then the line "Workflow: product", then: "Tally lets flatmates log shared bills and see who owes whom, settled monthly."
+      - _bmad-output/initiative-tally/forge-tally/forge-tally.md, brief-tally/brief-tally.md and prd-tally/prd-tally.md, each with 5–10 realistic lines about that app (phone-first web app, add a bill, see balances, settle up at month end).
    4. Check setup reports no problems, then stop and tell me:
       "Setup done. Now start a NEW session in this folder and type: /bmad-ux lets create UX design — choose the Coaching path."
    ```
@@ -131,7 +131,7 @@ Takes 30–45 minutes, mostly waiting: about 5 for setup, 15–25 for the conver
 6. Paste this to check the result:
 
    ```text
-   Check this test: is there a Claude Design canvas link in _bmad-output/tally/ux-tally/.memlog.md and a Canvas: line in ux-tally.md, is there a design-system-tally/design-system-tally.md with a Design System link, and does /bmad what's next? now recommend bmad-architecture? Answer pass or fail for each.
+   Check this test: is there a Claude Design canvas link in _bmad-output/initiative-tally/ux-tally/.memlog.md and a Canvas: line in ux-tally.md, is there a design-system-tally/design-system-tally.md with a Design System link, and does /bmad what's next? now recommend bmad-architecture? Answer pass or fail for each.
    ```
 
    Three passes and it's done.
