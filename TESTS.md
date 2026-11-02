@@ -55,6 +55,15 @@ One headless `/bmad what's next? Then run that step.` on a `Workflow: existing` 
 
 The link file was named after the system (`taxonomy`), not the initiative (`billing`). `/bmad` still matched it, because the template only asks for `design-system-<slug>/`.
 
+## Interactive run and the Finalize canvas
+
+| # | Test | Result |
+|---|---|---|
+| 22 | A person runs the `product` template interactively: bmad-ux on the Coaching path, then architecture and Sofia (`ux-test`, 1–2 Nov, 7 sessions) | ✅ Design System published at Finalize (20 components), link file saved, and updated in place in a later session. `/bmad` routed on to architecture. The `Workflow:` line survived, and 4 of 5 epics cite the Design System. ❌ No Design canvas. bmad-ux showed 4 directions, colour themes and 12 key screens as local HTML pages and never used the canvas creative tool |
+| 23 | Fix: the canvas becomes a second Finalize external handoff, run after the Design System publish. Tested headless on a copy of the test 22 project, with creative tools not asked for | ✅ One Design canvas, "Tally key screens", with 12 boards, one per accepted mockup, in journey order. Its `canvas.json` names the Tally Design System artifact. The link was written to the memlog and as a `Canvas:` line in `ux-tally.md`. The existing Design System was reused unchanged. 27 turns, about 5 minutes, $2.84 |
+
+Test 23 found two limits of the canvas: the mockups' styles came across as page-wide rules, so the canvas's properties panel can only edit some of them, and board heights are estimates.
+
 ## To run yourself
 
 These need a person at the keyboard.
@@ -82,12 +91,12 @@ Takes 30–45 minutes, mostly waiting: about 5 for setup, 15–25 for the conver
 
 2. Start a new session in that folder and type `/bmad-ux lets create UX design`. Choose the **Coaching path**.
 3. Answer its questions with anything reasonable: colours, fonts, one or two screens. Short answers keep it moving.
-4. When it shows design options, check whether it **opens a Claude Design canvas**. That's the main thing being tested.
-5. Let it Finalize, and say yes to publishing the Design System.
+4. It shows design options as HTML pages in your browser. That's expected.
+5. Let it Finalize, and say yes to publishing. It should publish the Design System, then put the accepted mockups on a Claude Design canvas.
 6. Paste this to check the result:
 
    ```text
-   Check this test: is there a Claude Design canvas link in _bmad-output/tally/ux-tally/.memlog.md, is there a design-system-tally/design-system-tally.md with a Design System link, and does /bmad what's next? now recommend bmad-architecture? Answer pass or fail for each.
+   Check this test: is there a Claude Design canvas link in _bmad-output/tally/ux-tally/.memlog.md and a Canvas: line in ux-tally.md, is there a design-system-tally/design-system-tally.md with a Design System link, and does /bmad what's next? now recommend bmad-architecture? Answer pass or fail for each.
    ```
 
    Three passes and it's done.
@@ -96,7 +105,7 @@ Takes 30–45 minutes, mostly waiting: about 5 for setup, 15–25 for the conver
 
 ## Not tested
 
-- bmad-ux making Claude Design artifacts in an interactive run, or on the Coaching path. Tests 16–19 used a headless Finalize.
+- A full interactive run since the Finalize canvas step was added. Test 23 ran that step headless.
 - Building a Design System from code with built, live component previews. Test 20 used the read-only route.
 - How the published Design System and canvas look on the page. Tests 17–18 checked the files, not the rendering.
 - Harnesses other than Claude Code, including running the Cursor install prompt inside Cursor.

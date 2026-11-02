@@ -20,7 +20,7 @@ Create `.claude/skills/bmod-sdlc/bmod.toml` with exactly this content:
 ```toml
 [bmod]
 code = "sdlc"
-version = "0.1.0"
+version = "0.2.0"
 update_source = "file:.claude/skills"
 skills = []
 ```
@@ -50,7 +50,7 @@ forge idea → UX (fast) → Design System → architecture (fast) → tickets �
 |---|---|---|---|
 | 1 | Test the idea | `bmad-forge-idea` | `forge-<slug>/forge-<slug>.md` |
 | 2 | Look and behaviour (Fast path) | `bmad-ux` | `ux-<slug>/DESIGN.md` with `status: final` |
-| 3 | Publish the Design System from DESIGN.md (done at UX Finalize) | `bmad-ux` | `design-system-<slug>/design-system-<slug>.md` |
+| 3 | Publish the Design System from DESIGN.md, then the key screens on a Design canvas (both done at UX Finalize) | `bmad-ux` | `design-system-<slug>/design-system-<slug>.md` |
 | 4 | Tech decisions (Fast path) | `bmad-architecture` | `architecture-<slug>/` |
 | 5 | Tickets that cite DESIGN.md and the Design System | `bmad-agent-po` | `tickets/epic-<slug>/` |
 | 6 | Build, one story per session | `bmad-build` | every story in the epic is `built` |
@@ -70,8 +70,8 @@ forge idea → brief or PRFAQ → PRD → UX → Design System → architecture 
 | 1 | Test the idea | `bmad-forge-idea` (or `bmad-brainstorming` first) | `forge-<slug>/forge-<slug>.md` |
 | 2 | Write the product story | `bmad-product-brief`, or `bmad-prfaq` for a customer-facing product | `brief-<slug>/` or `prfaq-<slug>/` |
 | 3 | Requirements people sign off | `bmad-prd` | `prd-<slug>/prd-<slug>.md` |
-| 4 | Look and behaviour (Coaching path, with Design canvases) | `bmad-ux` | `ux-<slug>/DESIGN.md` with `status: final` |
-| 5 | Publish the Design System from DESIGN.md (done at UX Finalize) | `bmad-ux` | `design-system-<slug>/design-system-<slug>.md` |
+| 4 | Look and behaviour (Coaching path) | `bmad-ux` | `ux-<slug>/DESIGN.md` with `status: final` |
+| 5 | Publish the Design System from DESIGN.md, then the key screens on a Design canvas (both done at UX Finalize) | `bmad-ux` | `design-system-<slug>/design-system-<slug>.md` |
 | 6 | Tech decisions | `bmad-architecture` | `architecture-<slug>/` |
 | 7 | Initiative requirements, then epics, then stories | `bmad-agent-po` | `tickets/epic-*/` with stories |
 | 8 | Build each story, then review the code | `bmad-build`, then `bmad-code-review` | every story is `built` |
@@ -122,14 +122,12 @@ Create or merge `_bmad/custom/bmad-ux.toml` with these entries under `[workflow]
 persistent_facts = [
   "Read the active initiative's `Workflow:` line. In `design-led`, the Claude Design System artifact owns the look: read its README and tokens, and copy them into DESIGN.md. In every other template, DESIGN.md owns the look and the Design System artifact is published from it at Finalize.",
 ]
-creative_tools = [
-  "When showing design directions or key screens, make a Claude Design artifact (the Design type) built on the initiative's Design System, if one exists. Log its link in the memlog and save an exported copy under .working/.",
-]
 design_handoffs = [
   "Claude Design: make a Design artifact in this session from the assembled prompt. Save its link and an exported copy to {doc_workspace}/imports/.",
 ]
 external_handoffs = [
   "Unless the template is design-led, publish DESIGN.md as a Claude Design System artifact. Put the tokens in project/tokens.json in the list shape the type requires ({\"tokens\":[{name, value, usage}]}, never the nested DTCG map), Brand & Style and Do's and Don'ts in project/README.md, and Components in components/<Name>/. Write its link to design-system-<slug>/design-system-<slug>.md in the initiative's folder and show it to the user.",
+  "Unless the template is design-led, after the Design System is published, put the promoted key-screen mockups (every HTML file in {doc_workspace}/mockups/) on one Claude Design canvas (the Design artifact type) built on that Design System, one board per mockup, named after the screen. Keep each screen's layout and strings as the mockup has them. Write the canvas link to the memlog and as a 'Canvas:' line in {doc_workspace}/ux-<slug>.md, and show it to the user. If mockups/ holds no HTML file, skip this and say so.",
 ]
 ```
 

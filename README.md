@@ -9,16 +9,16 @@
 | Artifact type | What it holds | What the templates use it for |
 |---|---|---|
 | **Design System** | Tokens (colours, type, spacing, radius), components with live previews, and a brand README | The look of the product. Every later screen, ticket and deck is built on it |
-| **Design** | A canvas of screens and mockups | Design directions and key screens during UX. In `design-led`, the first screens |
+| **Design** | A canvas of screens and mockups | The accepted key screens, put on a canvas at the end of UX. In `design-led`, the first screens |
 | **Slides** | A 16:9 deck | The demo deck at the end of `poc` and `design-led` |
 
 ### What each template does with it
 
 | Template | Where the Design System comes from | Design canvases | Deck at the end |
 |---|---|---|---|
-| `poc` | bmad-ux (Fast path) writes DESIGN.md, then publishes it as a Design System at UX Finalize | Key screens at Finalize only. The Fast path skips design directions | Yes |
-| `product` | bmad-ux (Coaching path) writes DESIGN.md, then publishes it as a Design System at UX Finalize | Yes, as part of the Coaching path | No |
-| `existing` | Built first, from the code's real styles and components, so new screens match old ones. bmad-ux then designs the new work on it | When bmad-ux shows directions | No |
+| `poc` | bmad-ux (Fast path) writes DESIGN.md, then publishes it as a Design System at UX Finalize | The key screens, at UX Finalize | Yes |
+| `product` | bmad-ux (Coaching path) writes DESIGN.md, then publishes it as a Design System at UX Finalize | The key screens, at UX Finalize | No |
+| `existing` | Built first, from the code's real styles and components, so new screens match old ones. bmad-ux then designs the new work on it | The key screens, at UX Finalize | No |
 | `design-led` | Made in Claude first, then key screens on a Design canvas. bmad-ux imports the canvas and copies the system into DESIGN.md | Yes, before UX | Yes |
 
 ### How the pieces connect
@@ -33,12 +33,12 @@
                           │
        ┌──────────────────┼────────────────────┐
        ▼                  ▼                    ▼
- Design canvases    UI tickets cite it    Slides deck
- (bmad-ux)          (Sofia)               (poc, design-led)
+ Design canvas      UI tickets cite it    Slides deck
+ (bmad-ux Finalize) (Sofia)               (poc, design-led)
 ```
 
 - **One link, kept in one file.** The Design System's link lives in `design-system-<slug>/design-system-<slug>.md` in the initiative's folder. `/bmad` counts that step as done once the file exists, and every later step reads the link from there.
-- **bmad-ux uses Claude Design without being asked.** The setup prompt adds Claude Design to bmad-ux's creative tools and handoffs. bmad-ux shows design directions on Design canvases built on the Design System, and saves each link and an exported copy. Outside `design-led`, it publishes DESIGN.md as the Design System at Finalize.
+- **bmad-ux uses Claude Design at Finalize, every time.** While you design, bmad-ux shows options as local HTML pages in your browser: directions, colour themes and key-screen mockups. At Finalize, two steps the setup prompt adds always run, in this order. First it publishes DESIGN.md as the Design System. Then it puts every accepted mockup on one Design canvas built on that system, and saves the canvas link in the memlog and in `ux-<slug>/ux-<slug>.md`. `design-led` skips both, because its Design System and canvas are made first.
 - **Sofia keeps builds on the same look.** Every ticket that builds UI lists the Design System file in its References.
 - **Some steps are Claude itself, not a BMad skill.** Those are building the Design System from code (`existing`), the Design System and first canvas (`design-led`), and the Slides deck (`poc`, `design-led`). `/bmad` routes you to them like any other step. Claude makes the artifact and saves its link to the file the step names.
 
@@ -50,10 +50,10 @@
 ### What you need, and what's been tested
 
 - **The claude.ai artifacts connector, available in Claude Code.** Without it, `/bmad` still routes you to the design steps, but nothing can make the artifacts.
-- **Tested:** `/bmad` routing to the design steps in all four templates. Also bmad-ux finalizing a `poc` design: it published the Design System, made a Design canvas built on it, saved the link file, and `/bmad` then moved on to architecture. See [TESTS.md](TESTS.md), tests 16–19.
-- **Headless runs need creative tools turned on.** bmad-ux leaves creative tools off when run headless (`claude -p`), so it won't make canvases unless the request says to. The Design System is still published either way.
-- **Also tested:** building a Design System from a real codebase for `existing`. Claude read the code, published the system, and saved the link file without being told to. See [TESTS.md](TESTS.md), tests 20–21.
-- **Not tested yet:** an interactive bmad-ux run on the Coaching path. [TESTS.md](TESTS.md) has the steps to run it yourself.
+- **Tested:** `/bmad` routing to the design steps in all four templates.
+- **Tested:** a full interactive `product` run on the Coaching path, through UX, architecture and tickets. The Design System was published at Finalize, the link file was saved, and the epics cite it. See [TESTS.md](TESTS.md), test 22.
+- **Tested:** the canvas step at Finalize. On that same project it put all 12 accepted mockups on one Design canvas built on the Design System, without being asked. See test 23. Before this step was added, interactive runs made no canvas, because bmad-ux always chose its own HTML pages.
+- **Tested:** building a Design System from a real codebase for `existing`. Claude read the code, published the system, and saved the link file without being told to. See tests 20–21.
 
 ## The four templates
 
@@ -167,5 +167,5 @@ Always test on a throwaway copy, never in a real project.
 ## Open items
 
 - **Don't use `/design-sync` for the `existing` template's step 2.** It syncs to standalone Claude Design projects (claude.ai/design), which close by 14 December 2026. Use the route tests 20–21 used instead: Claude reads the code and publishes a Design System artifact directly.
-- **Not tested:** an interactive bmad-ux run on the Coaching path. See "To run yourself" in [TESTS.md](TESTS.md).
+- **Not tested:** a full interactive run since the Finalize canvas step was added. The step itself was tested in test 23.
 - **Idea:** offer the templates upstream to BMAD-METHOD as a module, once they've been used on a real project.
