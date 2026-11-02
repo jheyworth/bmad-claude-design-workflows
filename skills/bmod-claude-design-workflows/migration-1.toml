@@ -1,23 +1,32 @@
----
-name: claude-design-workflows-setup
-description: Adds the Claude Design steps of the claude-design-workflows module to bmad-ux and Sofia (bmad-agent-po) as project customizations. Use when the user says "set up Claude Design workflows" or the module's install message asks for it.
----
+# Adds the Claude Design steps to bmad-ux and Sofia. `bmad setup` and `bmad update` offer it whenever `detect` matches.
 
-# Claude Design workflows setup
+[migration]
+module = "claude-design-workflows"
+from = "none"
+to = "0.6.0"
+title = "Add the Claude Design steps to bmad-ux and Sofia"
+summary = "Writes this module's entries into _bmad/custom/bmad-ux.toml and _bmad/custom/bmad-agent-po.toml: bmad-ux publishes the Design System and canvas at Finalize, or writes a 'Not published' note when artifacts are unavailable, and Sofia keeps the Workflow: line and cites the Design System in UI tickets. Replaces this module's earlier entries and keeps everything else."
 
-Write this module's overrides of two BMad skills into the project's `_bmad/custom/` files. Change nothing else.
+# Read-only. Any one signal makes this worth offering.
+detect = '''
+- `_bmad/custom/bmad-ux.toml` or `_bmad/custom/bmad-agent-po.toml` is missing.
+- Either file has no string starting with `[claude-design-workflows]`.
+- The strings starting with `[claude-design-workflows]` in either file are not exactly the entries in `bmad_ux` and `bmad_agent_po` below, in the same lists: one is missing, extra, or worded differently.
+None of these: the project already has the current entries. Say so and stop.
+'''
 
-## Rules
+precautions = '''
+- Work only on the two files named here. Change nothing else in `_bmad/`.
+- Every entry this module owns is a string starting with `[claude-design-workflows]`. Keep every other entry, table and comment exactly as it is.
+'''
 
-- Work only inside the project folder: the nearest folder containing `_bmad/`. If there is none, or `bmod-claude-design-workflows` is not installed beside the `bmad` skill, stop and say to run `npx skills add jheyworth/bmad-claude-design-workflows --skill bmod-claude-design-workflows -y` and `/bmad setup` first.
-- Every entry this skill owns is a string that starts with `[claude-design-workflows]`. In each file below, first remove every string in the named lists that starts with that prefix, then add the entries below. That makes a second run replace the first instead of adding to it.
-- Keep every other entry, table and comment in the file exactly as it is. If the file does not exist, create it with only the table shown.
-- Show the user each merged file before saving it.
-- At the end, list every file created or changed, then run `uv run _bmad/scripts/resolve_customization.py --skill <skills-folder>/bmad-ux --project-root . --key workflow` and confirm each entry appears exactly once.
+guide = '''
+1. For each of `_bmad/custom/bmad-ux.toml` (from `bmad_ux`) and `_bmad/custom/bmad-agent-po.toml` (from `bmad_agent_po`): read the file if it exists. In each list named in the block, remove every string that starts with `[claude-design-workflows]`, then add the block's entries to the end of that list. If the file doesn't exist, the result is the block alone.
+2. Show the user both merged files in full and ask before saving. Save only on a yes.
+3. Run the checklist and report each result, then list the files created or changed.
+'''
 
-## `_bmad/custom/bmad-ux.toml`, under `[workflow]`
-
-```toml
+bmad_ux = '''
 [workflow]
 persistent_facts = [
   "[claude-design-workflows] Read the active initiative's `Workflow:` line. In `design-led`, the Claude Design System artifact owns the look: read its README and tokens, and copy them into DESIGN.md. In every other template, DESIGN.md owns the look and the Design System artifact is published from it at Finalize.",
@@ -30,14 +39,18 @@ external_handoffs = [
   "[claude-design-workflows] Unless the template is design-led, publish DESIGN.md as a Claude Design System artifact. Put the tokens in project/tokens.json in the list shape the type requires ({\"tokens\":[{name, value, usage}]}, never the nested DTCG map), Brand & Style and Do's and Don'ts in project/README.md, and Components in components/<Name>/. Write its link to design-system-<slug>/design-system-<slug>.md in the initiative's folder and show it to the user.",
   "[claude-design-workflows] Unless the template is design-led, after the Design System is published, put the promoted key-screen mockups (every HTML file in {doc_workspace}/mockups/) on one Claude Design canvas (the Design artifact type) built on that Design System, one board per mockup, named after the screen. Keep each screen's layout and strings as the mockup has them. Write the canvas link to the memlog and as a 'Canvas:' line in {doc_workspace}/ux-<slug>.md, and show it to the user. If mockups/ holds no HTML file, skip this and say so.",
 ]
-```
+'''
 
-## `_bmad/custom/bmad-agent-po.toml`, under `[agent]`
-
-```toml
+bmad_agent_po = '''
 [agent]
 persistent_facts = [
   "[claude-design-workflows] An initiative file may hold a line `Workflow: <id>` below its frontmatter. It names the initiative's workflow template. Keep it exactly as it is whenever you edit the file.",
   "[claude-design-workflows] When `design-system-<slug>/design-system-<slug>.md` exists in the initiative's folder, list it in the References of every ticket that builds UI. If it holds a `Not published:` line instead of a link, list `ux-<slug>/DESIGN.md` instead.",
 ]
-```
+'''
+
+checklist = [
+  "`uv run _bmad/scripts/resolve_customization.py --skill <skills-folder>/bmad-ux --project-root . --key workflow` shows each `bmad_ux` entry exactly once.",
+  "`uv run _bmad/scripts/resolve_customization.py --skill <skills-folder>/bmad-agent-po --project-root . --key agent` shows each `bmad_agent_po` entry exactly once.",
+  "Every entry in both files that doesn't start with `[claude-design-workflows]` is unchanged from before.",
+]
