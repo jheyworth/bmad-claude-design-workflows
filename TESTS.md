@@ -97,6 +97,16 @@ Version 0.5.0 adds a rule for setups that can't publish Claude artifacts, such a
 
 Not tested: Sofia writing a ticket that cites DESIGN.md when the link file says `Not published:`. `resolve_customization.py` shows her rule, but no tickets were written.
 
+## Two-line install (0.5.1)
+
+`/bmad setup` now ends by offering to add the Claude Design steps, through the module's `post_install_message`. Tested headless on a fresh BMad install, with the module from the `bmad-setup-overrides` branch, as one Claude session continued turn by turn.
+
+| # | Test | Result |
+|---|---|---|
+| 38 | `/bmad setup`, then "yes", then "yes, save both" | ✅ setup quoted the install message and waited. After "yes", it ran `npx -y skills use …@claude-design-workflows-setup`, showed both merged `_bmad/custom/` files and asked before saving. After the second yes, it saved them, and each entry resolves once. Total about $2.90, with two retries |
+
+The two retries came from permissions. Under auto mode, Claude Code's safety check refused `npx skills use` because it runs instructions fetched from outside the project. Then the allow rule `Bash(npx skills:*)` didn't match the `npx -y skills use` it actually ran. With `Bash(npx:*)` allowed in default mode, it went through. A person in an interactive session gets a permission prompt instead.
+
 Before the branch, a hand-written record listing the setup skill as a member, with that skill not installed, gave `absent_skills: ["claude-design-workflows-setup"]` and `absent_install: "npx skills add jheyworth/bmad-claude-design-workflows --skill claude-design-workflows-setup"`. That's why the setup skill is kept out of the record's `skills` list.
 
 ## To run yourself

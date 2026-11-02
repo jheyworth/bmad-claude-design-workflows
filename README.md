@@ -27,6 +27,7 @@
    ```
 
    Then run `/bmad setup` in Claude Code. At the end it asks whether to add the Claude Design steps to bmad-ux and Sofia. Say yes: it shows each file it will change and asks before saving.
+   - Claude Code asks permission to run `npx skills use`, because it fetches the setup steps from this repo. Allow it. In auto mode, Claude Code may refuse it instead; approve the command when asked, or allow `Bash(npx -y skills use jheyworth/bmad-claude-design-workflows*)`.
 3. **Start an initiative** with `/bmad`, and add a line below its frontmatter naming a template, for example `Workflow: poc`. The templates are in [Pick a template](#pick-a-template).
 4. **Ask `/bmad what's next?`** whenever you finish a step.
 
