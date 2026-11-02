@@ -77,6 +77,12 @@ The module record and the setup skill were moved from the setup prompt into `ski
 | 30 | A team entry added to each file, then the same run again | ✅ each entry still once, the team entries kept, and the files otherwise byte-identical to test 29's. 5 turns, $0.31 |
 | 31 | Plain `npx skills add` from the branch, without `--skill` | ✅ no problems, but the setup skill is installed too and stays. The Quick start keeps `--skill` for this reason |
 
+After merging to `main` and making the repo public:
+
+| # | Test | Result |
+|---|---|---|
+| 32 | The Quick start as written, from `main`, in a fresh project | ✅ only the record installed, setup `"problems": []`, and the `skills use` pipe wrote each override once (8 turns, $0.32). While the repo was private, the version check got a 404 from `raw.githubusercontent.com`; once public, it reported `current` at 0.4.0 |
+
 Before the branch, a hand-written record listing the setup skill as a member, with that skill not installed, gave `absent_skills: ["claude-design-workflows-setup"]` and `absent_install: "npx skills add jheyworth/bmad-claude-design-workflows --skill claude-design-workflows-setup"`. That's why the setup skill is kept out of the record's `skills` list.
 
 ## To run yourself
