@@ -6,6 +6,8 @@ Each initiative follows one template. The initiative file names it on its own li
 
 **Claude Design.** Three Claude artifact types do the design work: **Design System** (tokens, components and a brand README that every later design and deck is built on), **Design** (a canvas of screens and mockups) and **Slides** (a deck). The Design System's link is kept in `design-system-<slug>/design-system-<slug>.md` in the initiative's folder, and every later step reads it from there.
 
+**Without Claude artifacts.** Some setups can't publish Claude artifacts: Claude Code signed in with a Claude API key, a gateway, Amazon Bedrock, Google Cloud or Microsoft Foundry; an organization that turned artifacts off or uses CMEK, HIPAA or Zero Data Retention; or a session where artifacts are switched off. Check this session before recommending a Claude Design step: if you have no tool for publishing claude.ai artifacts, they aren't available. There, every Claude Design step is done by writing its link file with one line instead of a link: `Not published: Claude artifacts aren't available in this session. DESIGN.md is the source of the look.` A link file holding that line counts as done, so the route moves on. Tickets and later steps then use DESIGN.md, and the canvas and Slides deck are skipped. When you recommend the next step and a link file holds that line, say once that the Claude Design steps were skipped and can be run later, when artifacts are available, by replacing the line with a link. `design-led` starts in Claude Design, so it needs artifacts: without them, don't recommend its first step. Say that this session can't publish Claude artifacts, recommend switching the `Workflow:` line to `product` or `poc`, and say which fits from the initiative file.
+
 **Who owns the look.** In `design-led`, the Design System artifact owns the look and DESIGN.md is copied from it. In every other template, DESIGN.md owns the look and the Design System artifact is published from it.
 
 ## Template `poc`: prove one idea works, fast
@@ -66,7 +68,7 @@ project context → Design System from code → UX (update) → architecture (re
 
 ## Template `design-led`: the look comes first
 
-**In plain English.** For when the visual identity drives the product, such as a brand, a consumer app or a pitch. You design in Claude first: the Design System, then screens on a Design canvas. BMad then turns those into DESIGN.md and EXPERIENCE.md and carries on as usual. The Design System owns the look; DESIGN.md is copied from it.
+**In plain English.** For when the visual identity drives the product, such as a brand, a consumer app or a pitch. You design in Claude first: the Design System, then screens on a Design canvas. BMad then turns those into DESIGN.md and EXPERIENCE.md and carries on as usual. The Design System owns the look; DESIGN.md is copied from it. Needs Claude artifacts; without them, use `product` or `poc`.
 
 ```
 Design System → Design canvas screens → UX (imports the canvas) → architecture → tickets → build → Slides

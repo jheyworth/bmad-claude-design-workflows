@@ -4,17 +4,21 @@
 
 **One BMad module turns a standard BMad install into a guided product workflow.** You pick a template, `/bmad what's next?` walks you through it step by step, and the product's look is published to Claude Design for every later step to build on.
 
+## Which Claude plans it works on
+
+| Your Claude plan | Templates and `/bmad` routing | Design published to Claude Design |
+|---|---|---|
+| **Pro, Max, Ultra** | ✅ | ✅ |
+| **Team, Enterprise** | ✅ | ✅ unless your admin has turned artifacts off |
+| **Claude API** (an API key, a company gateway, Amazon Bedrock, Google Cloud or Microsoft Foundry) | ✅ | ❌ |
+
+**❌ means you still get the whole workflow, without the publishing.** The design lives in DESIGN.md and local HTML mockups, and every later step uses those. The `design-led` template is the exception: it starts in Claude Design, so it needs a ✅ plan.
+
+**Two catches on Pro to Enterprise:** sign in to Claude Code with your Claude account, not an API key, and check that your organization hasn't switched artifacts off. Some Enterprise setups can't have them at all. [Full details](#claude-plans-and-claude-design).
+
 ## Quick start
 
-0. **Check Claude Code can make artifacts.** The Claude Design steps publish claude.ai artifacts. Artifacts are built into Claude Code, so there's nothing to install or connect, but they're only on when all of these hold:
-   - **Plan:** Pro, Max, Ultra, Team or Enterprise.
-   - **Sign-in:** run `/login` and sign in with your claude.ai account. An API key, gateway token, or Bedrock, Google Cloud or Foundry credentials can't publish.
-   - **Version:** Claude Code v2.1.281 or later. Check with `claude --version`, upgrade with `claude update`.
-   - **Team and Enterprise:** an Owner hasn't turned artifacts off in [Organization settings → Artifacts](https://claude.ai/admin-settings/artifacts).
-   - **Not switched off on your machine:** the **Artifacts** row in `/config` is on, and neither `CLAUDE_CODE_DISABLE_ARTIFACT` nor `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set.
-   - **An interactive session:** artifacts are off by default under `claude -p` and the Agent SDK, so run the design steps in a normal Claude Code session.
-
-   Without artifacts, `/bmad` still follows the route, but the Claude Design steps can't make anything. Details: [Claude Code artifacts](https://code.claude.com/docs/en/artifacts).
+0. **Check your plan** in [Which Claude plans it works on](#which-claude-plans-it-works-on). On a Claude API plan, everything below still works, but nothing is published to Claude Design.
 1. **Install BMad** in your project: `npx skills add bmad-code-org/BMAD-METHOD --skill '*' -y`, then `/bmad setup`.
 2. **Install the templates:** `npx skills add jheyworth/bmad-claude-design-workflows --skill bmod-claude-design-workflows -y`, then `/bmad setup` again.
    - Keep `--skill bmod-claude-design-workflows`. Without it, the setup skill from step 3 is installed too and stays installed.
@@ -99,6 +103,28 @@ Using `product` as the example:
 - **Some steps are Claude, not a BMad skill**
   - **Which ones:** the Design System from code (`existing`), the first Design System and canvas (`design-led`), and the Slides deck.
   - **How they run:** `/bmad` routes you to them like any other step. Claude makes the artifact and saves its link where the step says.
+
+## Claude plans and Claude Design
+
+The Claude Design steps publish claude.ai artifacts. Artifacts are built into Claude Code, so there's nothing to install or connect. They're on when all of these hold ([Claude Code artifacts docs](https://code.claude.com/docs/en/artifacts)):
+
+- **Your plan** is Pro, Max, Ultra, Team or Enterprise.
+- **You sign in to Claude Code with your Claude account.** Run `/login` and choose your claude.ai account, usually through your company's single sign-on on Team and Enterprise. Claude Code signed in with an API key, a gateway token, or Amazon Bedrock, Google Cloud or Microsoft Foundry credentials can't publish, even if your company also has an Enterprise plan.
+- **On Team and Enterprise, your organization allows them.**
+  - An Owner hasn't turned artifacts off in [Organization settings → Artifacts](https://claude.ai/admin-settings/artifacts). They're on by default.
+  - The organization doesn't use customer-managed encryption keys (CMEK), HIPAA or Zero Data Retention. Artifacts aren't available with any of these.
+  - Claude Code can reach `api.anthropic.com` to load the organization's policy. If it can't, artifacts are off.
+- **Claude Code is v2.1.281 or later.** Check with `claude --version`, upgrade with `claude update`.
+- **Artifacts aren't switched off on your machine.** The **Artifacts** row in `/config` is on, and neither `CLAUDE_CODE_DISABLE_ARTIFACT` nor `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set.
+- **If artifacts are missing in a script, run the design steps in a normal Claude Code session.** The docs say artifacts are off by default under `claude -p` and the Agent SDK, though they were on in this project's `claude -p` tests.
+
+**What happens without artifacts**
+
+- **bmad-ux works as usual.** It writes DESIGN.md and EXPERIENCE.md and shows its mockups as local HTML pages.
+- **Each Claude Design step writes its link file with a note instead of a link:** `Not published: Claude artifacts aren't available in this session. DESIGN.md is the source of the look.` That counts as done, so `/bmad what's next?` moves on to architecture.
+- **Tickets cite DESIGN.md** instead of the Design System. The canvas and the Slides deck are skipped.
+- **You can publish later.** On a plan with artifacts, run the step again and the note is replaced with a link.
+- **`design-led` isn't available.** It starts in Claude Design, so `/bmad` suggests `product` or `poc` instead.
 
 ## What it changes in your project
 

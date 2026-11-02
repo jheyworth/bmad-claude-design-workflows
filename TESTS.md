@@ -84,6 +84,19 @@ After merging to `main` and making the repo public:
 | 32 | The Quick start as written, from `main`, in a fresh project | ✅ only the record installed, setup `"problems": []`, and the `skills use` pipe wrote each override once (8 turns, $0.32). While the repo was private, the version check got a 404 from `raw.githubusercontent.com`; once public, it reported `current` at 0.4.0 |
 | 33 | `version` bumped to 0.4.1 on `main`, then the same project checked again | ✅ after about 5 minutes (GitHub's raw-file cache), `--status` reported `newer-available` 0.4.1 with `next: npx skills update`. `npx skills update -p -y` updated only `bmod-claude-design-workflows`; setup then reported 0.4.1, `"problems": []` and the `post_install_message`. Both `_bmad/custom/` files were byte-identical afterwards |
 
+## Without Claude artifacts (0.5.0)
+
+Version 0.5.0 adds a rule for setups that can't publish Claude artifacts, such as a Claude API key, Bedrock, Google Cloud or Foundry. Each Claude Design step writes its link file with a `Not published:` line instead of a link, and the route moves on. Tested headless with `CLAUDE_CODE_DISABLE_ARTIFACT=1`, on a fresh BMad install with the 0.5.0 module files copied in and the setup skill run from the local file.
+
+| # | Test | Result |
+|---|---|---|
+| 34 | `CLAUDE_CODE_DISABLE_ARTIFACT=1` removes the artifact tools | ✅ without it, `claude -p` listed the `claude-artifacts` tools (so they aren't off by default under `-p` here, whatever the docs say); with it, `NONE` |
+| 35 | `poc` with the forge step and a final DESIGN.md: `/bmad what's next? Then run that step.` | ✅ wrote `design-system-tally/design-system-tally.md` holding only the `Not published:` line, skipped the canvas, logged the skip in the memlog, told the user, and recommended `bmad-architecture`. 14 turns, $0.72 |
+| 36 | Then `/bmad what's next?` in a new session | ✅ recommended `bmad-architecture`, said once that the Claude Design steps were skipped and how to publish later, and noted the step 8 deck will be skipped too. 9 turns, $0.39 |
+| 37 | `design-led` with nothing done | ❌ first try: it recommended the Design System step "if artifacts work for you" and never checked the session. After the help was changed to say "if you have no tool for publishing claude.ai artifacts, they aren't available": ✅ said this session can't publish them, didn't recommend the first step, and recommended switching to `poc`, with the reason. 8 turns, $0.37 |
+
+Not tested: Sofia writing a ticket that cites DESIGN.md when the link file says `Not published:`. `resolve_customization.py` shows her rule, but no tickets were written.
+
 Before the branch, a hand-written record listing the setup skill as a member, with that skill not installed, gave `absent_skills: ["claude-design-workflows-setup"]` and `absent_install: "npx skills add jheyworth/bmad-claude-design-workflows --skill claude-design-workflows-setup"`. That's why the setup skill is kept out of the record's `skills` list.
 
 ## To run yourself

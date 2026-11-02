@@ -21,9 +21,10 @@ Write this module's overrides of two BMad skills into the project's `_bmad/custo
 [workflow]
 persistent_facts = [
   "[claude-design-workflows] Read the active initiative's `Workflow:` line. In `design-led`, the Claude Design System artifact owns the look: read its README and tokens, and copy them into DESIGN.md. In every other template, DESIGN.md owns the look and the Design System artifact is published from it at Finalize.",
+  "[claude-design-workflows] If you have no tool for publishing claude.ai artifacts in this session, or publishing is refused, don't attempt any Claude Design step. Where a step would write a Design System link, write `design-system-<slug>/design-system-<slug>.md` in the initiative's folder holding only the line `Not published: Claude artifacts aren't available in this session. DESIGN.md is the source of the look.` Skip the canvas. Tell the user in one line that the Claude Design steps were skipped and that DESIGN.md and the local mockups are the design.",
 ]
 design_handoffs = [
-  "[claude-design-workflows] Claude Design: make a Design artifact in this session from the assembled prompt. Save its link and an exported copy to {doc_workspace}/imports/.",
+  "[claude-design-workflows] Claude Design (only when this session can publish claude.ai artifacts): make a Design artifact in this session from the assembled prompt. Save its link and an exported copy to {doc_workspace}/imports/.",
 ]
 external_handoffs = [
   "[claude-design-workflows] Unless the template is design-led, publish DESIGN.md as a Claude Design System artifact. Put the tokens in project/tokens.json in the list shape the type requires ({\"tokens\":[{name, value, usage}]}, never the nested DTCG map), Brand & Style and Do's and Don'ts in project/README.md, and Components in components/<Name>/. Write its link to design-system-<slug>/design-system-<slug>.md in the initiative's folder and show it to the user.",
@@ -37,6 +38,6 @@ external_handoffs = [
 [agent]
 persistent_facts = [
   "[claude-design-workflows] An initiative file may hold a line `Workflow: <id>` below its frontmatter. It names the initiative's workflow template. Keep it exactly as it is whenever you edit the file.",
-  "[claude-design-workflows] When `design-system-<slug>/design-system-<slug>.md` exists in the initiative's folder, list it in the References of every ticket that builds UI.",
+  "[claude-design-workflows] When `design-system-<slug>/design-system-<slug>.md` exists in the initiative's folder, list it in the References of every ticket that builds UI. If it holds a `Not published:` line instead of a link, list `ux-<slug>/DESIGN.md` instead.",
 ]
 ```
