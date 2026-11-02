@@ -1,93 +1,19 @@
 # BMad product workflow templates, with Claude Design
 
-**One prompt turns a stock BMad install into a guided product workflow.** You choose a template for your initiative, and from then on `/bmad what's next?` tells you the next step and offers to run it. Claude Design artifacts (Design System, Design canvas, Slides) are built into the steps.
+**One setup prompt turns a standard BMad install into a guided product workflow.** You pick a template, `/bmad what's next?` walks you through it step by step, and the product's look is published to Claude Design for every later step to build on.
 
-## What this adds to standard BMad
+## The problem it solves
 
-The setup prompt doesn't change BMad itself. It adds three small files to a standard install: one template module and two override files.
+- **Standard BMad leaves the route to you**
+  - **`/bmad what's next?` suggests a step** from the skills you have installed, using its own judgement each time.
+  - **Nothing fixes the order**, so two projects of the same kind can take different routes.
+- **The design stays on your machine**
+  - **bmad-ux writes DESIGN.md and EXPERIENCE.md** and keeps its mockups as local HTML files.
+  - **Nothing is published** for tickets, builds or decks to point to.
 
-- **A set route, not a fresh guess each time**
-  - **Standard:** `/bmad what's next?` picks a next step from the skills you have installed.
-  - **With the templates:** it follows the template named in the initiative file (`poc`, `product`, `existing` or `design-led`).
-  - **How it knows where you are:** each step is done once its output file exists, so the next step is the first one whose file is missing.
-- **The look goes to Claude Design at the end of UX**
-  - **Standard:** bmad-ux writes DESIGN.md and EXPERIENCE.md and keeps the mockups as local HTML files.
-  - **With the templates:** at Finalize, bmad-ux also:
-    - publishes DESIGN.md as a **Claude Design System** (tokens, components and a brand README);
-    - puts every accepted mockup on one **Claude Design canvas** built on that system;
-    - saves both links in the project, where later steps read them.
-- **Every later step builds on the same Design System**
-  - **Tickets:** Sofia lists the Design System in every ticket that builds UI.
-  - **Decks:** the Slides deck at the end of `poc` and `design-led` is built on it.
-  - **Existing code:** in `existing`, the Design System is built first, from the code's real styles, so new screens match old ones.
-- **Design-first projects get their own order**
-  - **`design-led`:** the Design System and canvas are made in Claude first.
-  - **DESIGN.md is copied from them**, not the other way round.
-- **Two small extras**
-  - **Sofia keeps the `Workflow:` line** whenever she edits the initiative file, so the route isn't lost.
-  - **Claude Design joins Google Stitch** as a design handoff option in bmad-ux.
+## Pick a template
 
-## What stays the same
-
-- **Every BMad skill works as before.** No skill files are edited, and BMad updates don't remove the templates.
-- **bmad-ux still shows you options as local HTML pages** in your browser while you design.
-- **DESIGN.md still owns the look** in every template except `design-led`.
-- **Without the claude.ai artifacts connector**, `/bmad` still follows the route, but the Claude Design steps can't make anything.
-
-## How Claude Design is built into the workflows
-
-**Claude Design here means the new version: three Claude artifact types, made from inside Claude Code.** It doesn't use the standalone Claude Design app, which closes on 14 December 2026. Each artifact is a claude.ai page, private to you until you share it.
-
-| Artifact type | What it holds | What the templates use it for |
-|---|---|---|
-| **Design System** | Tokens (colours, type, spacing, radius), components with live previews, and a brand README | The look of the product. Every later screen, ticket and deck is built on it |
-| **Design** | A canvas of screens and mockups | The accepted key screens, put on a canvas at the end of UX. In `design-led`, the first screens |
-| **Slides** | A 16:9 deck | The demo deck at the end of `poc` and `design-led` |
-
-### What each template does with it
-
-| Template | Where the Design System comes from | Design canvases | Deck at the end |
-|---|---|---|---|
-| `poc` | bmad-ux (Fast path) writes DESIGN.md, then publishes it as a Design System at UX Finalize | The key screens, at UX Finalize | Yes |
-| `product` | bmad-ux (Coaching path) writes DESIGN.md, then publishes it as a Design System at UX Finalize | The key screens, at UX Finalize | No |
-| `existing` | Built first, from the code's real styles and components, so new screens match old ones. bmad-ux then designs the new work on it | The key screens, at UX Finalize | No |
-| `design-led` | Made in Claude first, then key screens on a Design canvas. bmad-ux imports the canvas and copies the system into DESIGN.md | Yes, before UX | Yes |
-
-### How the pieces connect
-
-```
-                 ┌─ poc, product: bmad-ux publishes DESIGN.md at UX Finalize
-                 ├─ existing:     built from the code's styles
-                 └─ design-led:   made in Claude first, copied into DESIGN.md
-                          │
-                          ▼
-        Design System artifact ── link saved in design-system-<slug>/design-system-<slug>.md
-                          │
-       ┌──────────────────┼────────────────────┐
-       ▼                  ▼                    ▼
- Design canvas      UI tickets cite it    Slides deck
- (bmad-ux Finalize) (Sofia)               (poc, design-led)
-```
-
-- **One link, kept in one file.** The Design System's link lives in `design-system-<slug>/design-system-<slug>.md` in the initiative's folder. `/bmad` counts that step as done once the file exists, and every later step reads the link from there.
-- **bmad-ux uses Claude Design at Finalize, every time.** While you design, bmad-ux shows options as local HTML pages in your browser: directions, colour themes and key-screen mockups. At Finalize, two steps the setup prompt adds always run, in this order. First it publishes DESIGN.md as the Design System. Then it puts every accepted mockup on one Design canvas built on that system, and saves the canvas link in the memlog and in `ux-<slug>/ux-<slug>.md`. `design-led` skips both, because its Design System and canvas are made first.
-- **Sofia keeps builds on the same look.** Every ticket that builds UI lists the Design System file in its References.
-- **Some steps are Claude itself, not a BMad skill.** Those are building the Design System from code (`existing`), the Design System and first canvas (`design-led`), and the Slides deck (`poc`, `design-led`). `/bmad` routes you to them like any other step. Claude makes the artifact and saves its link to the file the step names.
-
-### Who owns the look
-
-- **`design-led`:** the Claude Design System artifact is the master, and DESIGN.md is copied from it.
-- **Every other template:** DESIGN.md is the master, and the Design System artifact is published from it at the end of UX.
-
-### What you need, and what's been tested
-
-- **The claude.ai artifacts connector, available in Claude Code.** Without it, `/bmad` still routes you to the design steps, but nothing can make the artifacts.
-- **Tested:** `/bmad` routing to the design steps in all four templates.
-- **Tested:** a full interactive `product` run on the Coaching path, through UX, architecture and tickets. The Design System was published at Finalize, the link file was saved, and the epics cite it. See [TESTS.md](TESTS.md), test 22.
-- **Tested:** the canvas step at Finalize. On that same project it put all 12 accepted mockups on one Design canvas built on the Design System, without being asked. See test 23. Before this step was added, interactive runs made no canvas, because bmad-ux always chose its own HTML pages.
-- **Tested:** building a Design System from a real codebase for `existing`. Claude read the code, published the system, and saved the link file without being told to. See tests 20–21.
-
-## The four templates
+Each initiative names one template on a line in its initiative file, for example `Workflow: poc`.
 
 | Template | Use it when | The flow |
 |---|---|---|
@@ -96,32 +22,83 @@ The setup prompt doesn't change BMad itself. It adds three small files to a stan
 | `existing` | You're adding to code that already exists | project context → Design System from code → UX → architecture → tickets → build + code review |
 | `design-led` | The look comes first | Design System → Design canvas → UX → architecture → tickets → build → Slides |
 
-Each template, with its plain-English summary and step table, is in [SETUP-PROMPT.md](SETUP-PROMPT.md).
+Each template's plain-English summary and step table are in [SETUP-PROMPT.md](SETUP-PROMPT.md).
 
-## How to use it
+## What happens on a project
 
-1. **Install BMad** in your project: `npx skills add bmad-code-org/BMAD-METHOD --skill '*' -y`, then `/bmad setup`. The Claude Design steps also need Claude's artifact tools (the claude.ai artifacts connector) available in Claude Code. Without them, `/bmad` still routes you to those steps, but they can't make anything.
-2. **Paste the setup prompt.** Open Claude Code in the project and paste everything below the line in [SETUP-PROMPT.md](SETUP-PROMPT.md).
-3. **Start an initiative** with `/bmad` and add a line below its frontmatter, for example `Workflow: poc`.
-4. **Ask `/bmad what's next?`** whenever you finish a step.
+Using `product` as the example:
 
-## What the prompt changes
+1. **You start an initiative** and add `Workflow: product` to its file.
+2. **You ask `/bmad what's next?`** after every step.
+   - **It reads the template** and checks which steps' output files already exist.
+   - **It recommends the first missing step**, says why, and offers to run it.
+3. **You work through the early steps**: forge the idea, write the brief, then the PRD.
+4. **bmad-ux designs the look and behaviour with you.**
+   - **While you design**, it shows options as local HTML pages in your browser.
+   - **At Finalize**, it publishes DESIGN.md as a **Claude Design System**.
+   - **Then it puts every accepted mockup on one Claude Design canvas** built on that system.
+   - **Both links are saved in the project**, where later steps find them.
+5. **Architecture, then tickets.** Sofia lists the Design System in every ticket that builds UI.
+6. **Build and review.** Each story is built against the same Design System.
 
-It never overwrites an existing file. Where a file exists, it adds its entries to it.
+```
+ forge → brief → PRD → bmad-ux ──Finalize──▶ Design System ──▶ Design canvas
+                                                  │
+                         ┌────────────────────────┼─────────────────────┐
+                         ▼                        ▼                     ▼
+                   architecture          tickets cite it         Slides deck
+                                          (Sofia)              (poc, design-led)
+```
 
-| File | What it's for |
-|---|---|
-| `.claude/skills/bmod-sdlc/bmod.toml` and `help/help.md` | The templates. `/bmad` takes its "what's next" answers only from module help files, so they have to live here. It's two files, with no skills and no code |
-| `_bmad/custom/bmad-ux.toml` | Has bmad-ux render options on a Claude Design canvas and publish DESIGN.md as a Claude Design System |
-| `_bmad/custom/bmad-agent-po.toml` | Has Sofia keep the `Workflow:` line and cite the Design System in UI tickets |
+## Claude Design at each step
 
-## Why a module and not only customisations
+**Claude Design here means three Claude artifact types, made from inside Claude Code.** Each is a claude.ai page, private to you until you share it. The standalone Claude Design app, which closes on 14 December 2026, isn't used.
 
-`/bmad` has no customisation file, so bmad-customize can't change how it picks the next step. Its rules say to take routes only from module help and to treat every other file as evidence, not instructions. A module made of two files is the smallest thing it will follow.
+- **The three artifact types**
+  - **Design System:** tokens (colours, type, spacing, radius), components with live previews, and a brand README. It's the look every later step builds on.
+  - **Design:** a canvas of screens. It holds the accepted key screens.
+  - **Slides:** a 16:9 deck. It's the demo deck at the end of `poc` and `design-led`.
+- **Where the Design System comes from, per template**
+  - **`poc` and `product`:** bmad-ux publishes it from DESIGN.md at Finalize, then makes the canvas.
+  - **`existing`:** Claude builds it first, from the code's real styles and components, so new screens match old ones. bmad-ux makes the canvas at Finalize.
+  - **`design-led`:** you make the Design System and a canvas in Claude first. bmad-ux then imports them.
+- **Who owns the look**
+  - **`design-led`:** the Design System is the master, and DESIGN.md is copied from it.
+  - **Every other template:** DESIGN.md is the master, and the Design System is published from it.
+- **Where the links live**
+  - **Design System:** `design-system-<slug>/design-system-<slug>.md` in the initiative's folder. `/bmad` counts that step as done once the file exists.
+  - **Canvas:** a `Canvas:` line in `ux-<slug>/ux-<slug>.md`, and the memlog.
+- **Some steps are Claude, not a BMad skill**
+  - **Which ones:** the Design System from code (`existing`), the first Design System and canvas (`design-led`), and the Slides deck.
+  - **How they run:** `/bmad` routes you to them like any other step. Claude makes the artifact and saves its link where the step says.
 
-## Test record
+## Get started
 
-See [TESTS.md](TESTS.md).
+- **You need**
+  - **BMad**, installed with `npx skills add bmad-code-org/BMAD-METHOD --skill '*' -y`, then `/bmad setup`. Without npm, use [install-bmad-cursor-without-npm.md](install-bmad-cursor-without-npm.md) for Cursor.
+  - **The claude.ai artifacts connector in Claude Code.** Without it, `/bmad` still follows the route, but the Claude Design steps can't make anything.
+- **Then**
+  1. **Paste the setup prompt.** Open Claude Code in the project and paste everything below the line in [SETUP-PROMPT.md](SETUP-PROMPT.md).
+  2. **Start an initiative** with `/bmad` and add a line below its frontmatter, for example `Workflow: poc`.
+  3. **Ask `/bmad what's next?`** whenever you finish a step.
+
+## What it changes in your project
+
+- **Three small files are added.** The prompt never overwrites a file. Where one exists, it adds its entries to it.
+  - **`.claude/skills/bmod-sdlc/`** (`bmod.toml` and `help/help.md`): the templates. Two files, with no skills and no code.
+  - **`_bmad/custom/bmad-ux.toml`:** has bmad-ux publish the Design System and canvas at Finalize, and adds Claude Design as a handoff option alongside Google Stitch.
+  - **`_bmad/custom/bmad-agent-po.toml`:** has Sofia keep the `Workflow:` line and list the Design System in UI tickets.
+- **Everything else stays the same**
+  - **No BMad skill is edited**, and BMad updates don't remove the templates.
+  - **bmad-ux still shows options as local HTML pages** while you design.
+
+## What's been tested
+
+- **Routing:** `/bmad what's next?` picks the right step in all four templates.
+- **A full interactive run:** a person took `product` through UX, architecture and tickets. The Design System was published and the epics cite it.
+- **The canvas at Finalize:** all 12 accepted mockups went onto one canvas built on the Design System.
+- **Design System from code:** built from a real public codebase for `existing`, in both themes, at the code's exact values.
+- **Details, and what's not tested yet:** [TESTS.md](TESTS.md).
 
 ---
 
@@ -140,12 +117,17 @@ Everything you need to change the templates and test them again.
    └─ recommends the first step whose output is missing ─ "bmad-ux, Fast path"
                                                               │
                                     bmad-ux reads _bmad/custom/bmad-ux.toml
-                                    ── Claude Design canvas, Design System publish
+                                    ── at Finalize: Design System publish, then canvas
 ```
 
 - **The templates are a help document, not code.** `/bmad` reads them and reasons over the tables. Change the wording and you change its behaviour.
 - **"Done when" drives everything.** `/bmad` works out where you are only from which output files exist. Each step's "Done when" must name a file or folder the skill really writes.
 - **The other skills are steered by override files.** bmad-ux and Sofia read `_bmad/custom/<skill>.toml` when they start. In those files, lists are added to the defaults and single values replace them.
+- **Required steps go in `external_handoffs`, not `creative_tools`.** bmad-ux always runs its Finalize handoffs, but in a live session it always picked its own HTML tools over an added creative tool (test 22).
+
+## Why a module and not only customisations
+
+`/bmad` has no customisation file, so bmad-customize can't change how it picks the next step. Its rules say to take routes only from module help and to treat every other file as evidence, not instructions. A module made of two files is the smallest thing it will follow.
 
 ## Where the source of truth lives
 
