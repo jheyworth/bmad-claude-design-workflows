@@ -107,6 +107,20 @@ Not tested: Sofia writing a ticket that cites DESIGN.md when the link file says 
 
 The two retries came from permissions. Under auto mode, Claude Code's safety check refused `npx skills use` because it runs instructions fetched from outside the project. Then the allow rule `Bash(npx skills:*)` didn't match the `npx -y skills use` it actually ran. With `Bash(npx:*)` allowed in default mode, it went through. A person in an interactive session gets a permission prompt instead.
 
+## Overrides as a BMad migration (0.6.0)
+
+The setup skill is gone. Its overrides are now `migration-1.toml` in the module record, which `/bmad setup` offers. Install is `npx skills add jheyworth/bmad-claude-design-workflows -y`, then `/bmad setup`. Tested headless on a fresh BMad install with the module from the `bmad-migration` branch, as one Claude session continued turn by turn.
+
+| # | Test | Result |
+|---|---|---|
+| 39 | Plain `npx skills add` from the branch | ✅ only `bmod-claude-design-workflows` installed; `knowledge.py` lists the migration with no problems |
+| 40 | `/bmad setup` | ✅ offered "Add the Claude Design steps to bmad-ux and Sofia" because both files were missing, and asked. $0.77 |
+| 41 | "yes", then "yes, save them" | ✅ showed both files in full and asked; after the second yes, saved them and ran the checklist. Each entry resolves once. $1.77 |
+| 42 | `/bmad setup` again | ✅ offered nothing: "already contain exactly that module's current entries". $0.53 |
+| 43 | One entry changed to older wording and a team entry added, then `/bmad setup`, "yes", "yes, save" | ✅ named the one out-of-date entry, showed the merged file, replaced only its own entries, kept the team entry, and left `bmad-ux.toml` byte-identical. $1.69 |
+
+No permission prompt came up: nothing is fetched from outside the project.
+
 Before the branch, a hand-written record listing the setup skill as a member, with that skill not installed, gave `absent_skills: ["claude-design-workflows-setup"]` and `absent_install: "npx skills add jheyworth/bmad-claude-design-workflows --skill claude-design-workflows-setup"`. That's why the setup skill is kept out of the record's `skills` list.
 
 ## To run yourself

@@ -23,11 +23,10 @@
 2. **Install the templates:**
 
    ```
-   npx skills add jheyworth/bmad-claude-design-workflows --skill bmod-claude-design-workflows -y
+   npx skills add jheyworth/bmad-claude-design-workflows -y
    ```
 
-   Then run `/bmad setup` in Claude Code. At the end it asks whether to add the Claude Design steps to bmad-ux and Sofia. Say yes: it shows each file it will change and asks before saving.
-   - Claude Code asks permission to run `npx skills use`, because it fetches the setup steps from this repo. Allow it. In auto mode, Claude Code may refuse it instead; approve the command when asked, or allow `Bash(npx -y skills use jheyworth/bmad-claude-design-workflows*)`.
+   Then run `/bmad setup` in Claude Code. It offers one migration, "Add the Claude Design steps to bmad-ux and Sofia". Say yes: it shows both files it will write and asks before saving.
 3. **Start an initiative** with `/bmad`, and add a line below its frontmatter naming a template, for example `Workflow: poc`. The templates are in [Pick a template](#pick-a-template).
 4. **Ask `/bmad what's next?`** whenever you finish a step.
 
@@ -128,19 +127,19 @@ The Claude Design steps publish claude.ai artifacts. Artifacts are built into Cl
 ## What it changes in your project
 
 - **One module is installed** with `npx skills add`, like any other BMad module.
-  - **`bmod-claude-design-workflows/`** (`SKILL.md`, `bmod.toml` and `help/help.md`): the templates. A module record with no skills and no code.
-- **Two override files are written** by the setup skill. It never overwrites a file. Where one exists, it adds its entries to it, and on a second run it replaces only its own.
+  - **`bmod-claude-design-workflows/`** (`SKILL.md`, `bmod.toml`, `help/help.md` and `migration-1.toml`): the templates and the overrides. A module record with no skills and no code.
+- **Two override files are written** by the module's migration, which `/bmad setup` offers. It never overwrites a file. Where one exists, it adds its entries to it, and on a later run it replaces only its own.
   - **`_bmad/custom/bmad-ux.toml`:** has bmad-ux publish the Design System and canvas at Finalize, and adds Claude Design as a handoff option alongside Google Stitch.
   - **`_bmad/custom/bmad-agent-po.toml`:** has Sofia keep the `Workflow:` line and list the Design System in UI tickets.
   - **Every entry starts with `[claude-design-workflows]`**, so you can see which lines came from this module.
 - **Everything else stays the same**
   - **No BMad skill is edited**, and BMad updates don't remove the templates.
-  - **`/bmad update` updates the templates** along with BMad. It doesn't touch the override files itself. When the module's version changes, it asks again whether to update the Claude Design steps; say yes.
+  - **`/bmad update` updates the templates** along with BMad. When the module's override text has changed, it offers the migration again; say yes.
   - **bmad-ux still shows options as local HTML pages** while you design.
 
 ## What's been tested
 
-- **Install:** `npx skills add` from this repo registers the module, and the setup skill run with `npx skills use` writes each override once, even when run twice.
+- **Install:** `npx skills add` from this repo installs the module, and `/bmad setup` offers its migration, which writes each override once and replaces only its own entries on a later run.
 - **Routing:** `/bmad what's next?` picks the right step in all four templates.
 - **A full interactive run:** a person took `product` through UX, architecture and tickets. The Design System was published and the epics cite it.
 - **The canvas at Finalize:** all 12 accepted mockups went onto one canvas built on the Design System.
@@ -176,7 +175,7 @@ Everything you need to change the templates and test them again.
 
 `/bmad` has no customisation file, so bmad-customize can't change how it picks the next step. Its rules say to take routes only from module help and to treat every other file as evidence, not instructions. A module record with only a help file is the smallest thing it will follow.
 
-The overrides can't ship inside the module. A skill's customisation comes from exactly three files: its own `customize.toml`, then `_bmad/custom/<skill>.toml`, then `_bmad/custom/<skill>.user.toml`. `/bmad setup` doesn't write customisations, so a setup skill writes them into the project's `_bmad/custom/`.
+The overrides can't ship inside the module. A skill's customisation comes from exactly three files: its own `customize.toml`, then `_bmad/custom/<skill>.toml`, then `_bmad/custom/<skill>.user.toml`. So the module ships them as a BMad migration (`migration-1.toml`). `/bmad setup` and `/bmad update` check each installed module's migrations, offer the ones whose `detect` matches the project, and on a yes follow its `guide` and `checklist`. Ours matches when the `[claude-design-workflows]` entries are missing or differ from the file's.
 
 ## Where the source of truth lives
 
@@ -185,20 +184,20 @@ The overrides can't ship inside the module. A skill's customisation comes from e
 | To change | Edit |
 |---|---|
 | A template, a step, or what "what's next" does | [skills/bmod-claude-design-workflows/help/help.md](skills/bmod-claude-design-workflows/help/help.md) |
-| How bmad-ux uses Claude Design | The `bmad-ux.toml` block in [skills/claude-design-workflows-setup/SKILL.md](skills/claude-design-workflows-setup/SKILL.md) |
-| How Sofia treats the `Workflow:` line or Design System links | The `bmad-agent-po.toml` block in the same file |
-| Another skill's behaviour | Add a section for a new `_bmad/custom/<skill>.toml` to the same file |
+| How bmad-ux uses Claude Design | `bmad_ux` in [skills/bmod-claude-design-workflows/migration-1.toml](skills/bmod-claude-design-workflows/migration-1.toml) |
+| How Sofia treats the `Workflow:` line or Design System links | `bmad_agent_po` in the same file |
+| Another skill's behaviour | Add a block for a new `_bmad/custom/<skill>.toml` to the same file, and name it in `detect`, `guide` and `checklist` |
 
 On every release, bump `version` in [skills/bmod-claude-design-workflows/bmod.toml](skills/bmod-claude-design-workflows/bmod.toml). `/bmad update` only sees a new release when that number changes. It reads the number from GitHub `main`, which can take about 5 minutes to show a push, and only while the repo is public.
 
 ## Rules to keep
 
 - **Keep `update_source` in `bmod.toml`** pointing at this repo's `skills/` folder. Without it, `bmad setup` reports a problem, and `/bmad update` can't find new versions.
-- **Keep the setup skill out of the record's `skills` list** and without a `bmod.toml` of its own. It's run with `npx skills use`, not installed, and listing it would make `/bmad setup` offer to install it.
-- **Start every override entry with `[claude-design-workflows]`.** The setup skill removes entries with that prefix before adding its own, which is what keeps a second run from adding them twice.
+- **Keep `migration-1.toml` valid.** `knowledge.py` only lists a migration with `module`, `from`, `to`, `title`, `summary`, `detect`, `guide` and a non-empty `checklist`, and `module` must be `claude-design-workflows`. Change the blocks in place; existing projects are offered it again because `detect` compares their entries with the file's.
+- **Start every override entry with `[claude-design-workflows]`.** The migration removes entries with that prefix before adding its own, which is what keeps a second run from adding them twice.
 - **Never name the module after a retired BMad skill.** Setup deletes any skill listed in a module's `retired.toml`. `bmod-claude-design-workflows` is safe.
 - **Only use output names the skills really write.** Check the skill's own files before adding a step. For example, bmad-retrospective writes `epic-<slug>-retrospective.md` in the epic folder.
-- **Keep the setup skill merge-safe.** It must add to existing `_bmad/custom/*.toml` files, never replace them.
+- **Keep the migration merge-safe.** It must add to existing `_bmad/custom/*.toml` files, never replace them.
 - **Write Design System tokens as a list.** The Design System type only reads tokens in the shape `{"tokens":[{name, value, usage}]}`. A nested token map shows up empty.
 
 ## BMad files worth knowing
@@ -219,9 +218,9 @@ Paths are inside a BMad install (`.claude/skills/` or `.agents/skills/`).
 Always test on a throwaway copy, never in a real project.
 
 1. **Push the change to a branch**, then make a fresh BMad install in a temporary folder (`npx skills add bmad-code-org/BMAD-METHOD -y`). Run `git init` and commit, so you can see what changes.
-2. **Install from the branch:** `npx skills add 'jheyworth/bmad-claude-design-workflows#<branch>' --skill bmod-claude-design-workflows -y`, then run `npx skills use 'jheyworth/bmad-claude-design-workflows#<branch>@claude-design-workflows-setup'` and follow what it prints. `/bmad setup`'s offer uses `main`, so on a branch run the setup skill this way.
+2. **Install from the branch:** `npx skills add 'jheyworth/bmad-claude-design-workflows#<branch>' -y`, then `claude -p "/bmad setup"` and answer its migration offer with `claude -p "yes" --resume <session id>`, and the same for its save question.
 3. **Check setup:** `uv run _bmad/scripts/setup.py --project-root . --skill .claude/skills/bmad --root .claude/skills --status` must show `"problems": []`.
-4. **Check the overrides:** `uv run _bmad/scripts/resolve_customization.py --skill .claude/skills/bmad-ux --project-root . --key workflow` must show each `[claude-design-workflows]` entry once. Run step 2's setup command again and check it still does.
+4. **Check the overrides:** `uv run _bmad/scripts/resolve_customization.py --skill .claude/skills/bmad-ux --project-root . --key workflow` must show each `[claude-design-workflows]` entry once. Run `/bmad setup` again and check it offers nothing.
 5. **Check the help is found:** `uv run _bmad/scripts/knowledge.py --root .claude/skills` must list `claude-design-workflows`.
 6. **Check the routing:**
    - Make `_bmad-output/initiative-<slug>/initiative-<slug>.md` with frontmatter `type: initiative`, `title` and `parent: none`, then a `Workflow:` line below it. That's the name and folder `/bmad` uses when it creates an initiative.
