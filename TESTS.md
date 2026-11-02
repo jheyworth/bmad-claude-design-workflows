@@ -4,6 +4,8 @@ Run on throwaway copies of a BMad 6.13.0-next install (core-tools, method, tools
 
 ## Results
 
+Tests 1–23 ran while the module was called `bmod-sdlc` (code `sdlc`). It's now `bmod-claude-design-workflows`.
+
 | # | Test | Result |
 |---|---|---|
 | 1 | `knowledge.py` finds the module's help | ✅ `sdlc` listed in `documents`, no problems |
@@ -64,6 +66,12 @@ The link file was named after the system (`taxonomy`), not the initiative (`bill
 
 Test 23 found two limits of the canvas: the mockups' styles came across as page-wide rules, so the canvas's properties panel can only edit some of them, and board heights are estimates.
 
+## Module renamed to `bmod-claude-design-workflows`
+
+| # | Test | Result |
+|---|---|---|
+| 24 | The renamed prompt, pasted headless into a fresh BMad install, then `/bmad what's next?` on a `poc` initiative with the forge step done | ✅ setup `"problems": []` with `claude-design-workflows` scripts `created`; `knowledge.py` lists `claude-design-workflows`; routing recommended `bmad-ux`, Fast path. On an empty folder, the prompt stopped before step 1 and changed nothing, as its rules say |
+
 ## To run yourself
 
 These need a person at the keyboard.
@@ -80,7 +88,7 @@ Takes 30–45 minutes, mostly waiting: about 5 for setup, 15–25 for the conver
    1. Install BMad: clone https://github.com/bmad-code-org/BMAD-METHOD.git (depth 1) into .bmad-install-tmp, copy its skills/ folder contents into .claude/skills/, then run:
       uv run --no-cache .claude/skills/bmad/scripts/setup.py --project-root "$PWD" --skill "$PWD/.claude/skills/bmad" --root "$PWD/.claude/skills"
       Then delete .bmad-install-tmp.
-   2. Install the templates: follow every step in /path/to/bmad-sdlc-templates/SETUP-PROMPT.md (everything below its --- line). Approval is given.
+   2. Install the templates: follow every step in /path/to/bmad-claude-design-workflows/SETUP-PROMPT.md (everything below its --- line). Approval is given.
    3. Create a test initiative called "tally":
       - _bmad/custom/config.user.toml containing [core] and active_initiative = "tally"
       - _bmad-output/tally/tally.md with frontmatter title: Tally, then the line "Workflow: product", then: "Tally lets flatmates log shared bills and see who owes whom, settled monthly."

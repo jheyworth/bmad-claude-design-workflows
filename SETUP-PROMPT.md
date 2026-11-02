@@ -1,10 +1,10 @@
-# Setup prompt: BMad product workflow templates with Claude Design
+# Setup prompt: Claude Design workflows for BMad
 
 Paste everything below the line into Claude Code, opened in the project you want to set up. The project needs a stock BMad install first (`npx skills add bmad-code-org/BMAD-METHOD --skill '*' -y`, then `/bmad setup`).
 
 ---
 
-Set up product workflow templates for BMad in this project. Do exactly the steps below, in order, and change nothing else.
+Set up Claude Design workflows for BMad in this project: the workflow templates and the Claude Design steps. Do exactly the steps below, in order, and change nothing else.
 
 ## Rules for this run
 
@@ -15,17 +15,17 @@ Set up product workflow templates for BMad in this project. Do exactly the steps
 
 ## Step 1. Write the template module
 
-Create `.claude/skills/bmod-sdlc/bmod.toml` with exactly this content:
+Create `.claude/skills/bmod-claude-design-workflows/bmod.toml` with exactly this content:
 
 ```toml
 [bmod]
-code = "sdlc"
-version = "0.2.0"
+code = "claude-design-workflows"
+version = "0.3.0"
 update_source = "file:.claude/skills"
 skills = []
 ```
 
-Create `.claude/skills/bmod-sdlc/help/help.md` with exactly the content between the two `~~~~` lines:
+Create `.claude/skills/bmod-claude-design-workflows/help/help.md` with exactly the content between the two `~~~~` lines:
 
 ~~~~markdown
 # Product workflow templates
@@ -151,8 +151,8 @@ Run `/bmad setup`, or this command if the skill cannot run:
 uv run _bmad/scripts/setup.py --project-root . --skill .claude/skills/bmad --root .claude/skills
 ```
 
-It must report `"problems": []` and `"sdlc"` with scripts `created` or `current`. If it reports anything else, show me the output and stop.
+It must report `"problems": []` and `"claude-design-workflows"` with scripts `created` or `current`. If it reports anything else, show me the output and stop.
 
 ## Step 5. Check it
 
-Run `uv run _bmad/scripts/knowledge.py --root .claude/skills` and confirm that `sdlc` appears in `documents`. Then tell me in one line which template to start with, and that `/bmad what's next?` will now follow it.
+Run `uv run _bmad/scripts/knowledge.py --root .claude/skills` and confirm that `claude-design-workflows` appears in `documents`. Then tell me in one line which template to start with, and that `/bmad what's next?` will now follow it.

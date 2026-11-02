@@ -1,4 +1,6 @@
-# BMad product workflow templates, with Claude Design
+# Claude Design workflows for BMad
+
+*Workflow templates that take a BMad project from idea to build, with the look published to Claude Design.*
 
 **One setup prompt turns a standard BMad install into a guided product workflow.** You pick a template, `/bmad what's next?` walks you through it step by step, and the product's look is published to Claude Design for every later step to build on.
 
@@ -86,7 +88,7 @@ Using `product` as the example:
 ## What it changes in your project
 
 - **Three small files are added.** The prompt never overwrites a file. Where one exists, it adds its entries to it.
-  - **`.claude/skills/bmod-sdlc/`** (`bmod.toml` and `help/help.md`): the templates. Two files, with no skills and no code.
+  - **`.claude/skills/bmod-claude-design-workflows/`** (`bmod.toml` and `help/help.md`): the templates. Two files, with no skills and no code.
   - **`_bmad/custom/bmad-ux.toml`:** has bmad-ux publish the Design System and canvas at Finalize, and adds Claude Design as a handoff option alongside Google Stitch.
   - **`_bmad/custom/bmad-agent-po.toml`:** has Sofia keep the `Workflow:` line and list the Design System in UI tickets.
 - **Everything else stays the same**
@@ -112,7 +114,7 @@ Everything you need to change the templates and test them again.
 ```
 /bmad what's next?
    │
-   ├─ knowledge.py reads every module's help/help.md ── finds bmod-sdlc's templates
+   ├─ knowledge.py reads every module's help/help.md ── finds the module's templates
    ├─ reads the active initiative file ──────────────── finds "Workflow: poc"
    ├─ lists the initiative's folders ────────────────── forge-x/ exists, ux-x/ does not
    └─ recommends the first step whose output is missing ─ "bmad-ux, Fast path"
@@ -146,7 +148,7 @@ When you change the templates, bump `version` in the step 1 `bmod.toml`.
 ## Rules to keep
 
 - **Keep `update_source` in `bmod.toml`.** Without it, `bmad setup` reports a problem.
-- **Never name the module after a retired BMad skill.** Setup deletes any skill listed in a module's `retired.toml`. `bmod-sdlc` is safe.
+- **Never name the module after a retired BMad skill.** Setup deletes any skill listed in a module's `retired.toml`. `bmod-claude-design-workflows` is safe.
 - **Only use output names the skills really write.** Check the skill's own files before adding a step. For example, bmad-retrospective writes `epic-<slug>-retrospective.md` in the epic folder.
 - **Keep the prompt merge-safe.** It must add to existing `_bmad/custom/*.toml` files, never replace them.
 - **Write Design System tokens as a list.** The Design System type only reads tokens in the shape `{"tokens":[{name, value, usage}]}`. A nested token map shows up empty.
@@ -171,7 +173,7 @@ Always test on a throwaway copy, never in a real project.
 1. **Make a copy of a BMad install** in a temporary folder, then run `git init` and commit, so you can see what changes.
 2. **Run the prompt headless:** `claude -p "$(awk 'f;/^---$/{f=1}' SETUP-PROMPT.md)" --allowedTools "Bash(uv run:*)" "Bash(ls:*)" "Bash(mkdir:*)" Read Glob Grep Write Edit`. Add a line saying approval is given, since a headless run can't ask you.
 3. **Check setup:** `uv run _bmad/scripts/setup.py --project-root . --skill .claude/skills/bmad --root .claude/skills --status` must show `"problems": []`.
-4. **Check the help is found:** `uv run _bmad/scripts/knowledge.py --root .claude/skills` must list `sdlc`.
+4. **Check the help is found:** `uv run _bmad/scripts/knowledge.py --root .claude/skills` must list `claude-design-workflows`.
 5. **Check the routing:**
    - Set `active_initiative` in `_bmad/custom/config.user.toml`.
    - Make `_bmad-output/<initiative>/<initiative>.md` with a `Workflow:` line.
