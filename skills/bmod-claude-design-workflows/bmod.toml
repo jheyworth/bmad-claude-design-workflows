@@ -1,0 +1,8 @@
+[bmod]
+code = "claude-design-workflows"
+version = "0.4.0"
+update_source = "github:jheyworth/bmad-claude-design-workflows/skills"
+skills = []
+required_skills = [{ skill = "bmad", version = "6.13.0", source = "github:bmad-code-org/BMAD-METHOD/skills" }]
+pre_install_message = ""
+post_install_message = "Add the Claude Design steps to bmad-ux and Sofia: run `npx skills use jheyworth/bmad-claude-design-workflows@claude-design-workflows-setup` and follow it. Run it again whenever this module's version changes; it replaces its own earlier entries."

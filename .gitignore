@@ -1,0 +1,5 @@
+# BMad skills installed with npx skills add
+.agents/
+.claude/skills/
+skills-lock.json
+_bmad/
