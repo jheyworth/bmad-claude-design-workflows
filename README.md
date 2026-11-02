@@ -7,7 +7,6 @@
 ## Quick start
 
 1. **Install BMad** in your project: `npx skills add bmad-code-org/BMAD-METHOD --skill '*' -y`, then `/bmad setup`.
-   - **Without npm:** for Cursor, use [install-bmad-cursor-without-npm.md](install-bmad-cursor-without-npm.md).
    - **For the Claude Design steps:** you also need the claude.ai artifacts connector in Claude Code. Without it, `/bmad` still follows the route, but those steps can't make anything.
 2. **Paste the setup prompt.** Open Claude Code in the project and paste everything below the line in [SETUP-PROMPT.md](SETUP-PROMPT.md).
 3. **Start an initiative** with `/bmad`, and add a line below its frontmatter naming a template, for example `Workflow: poc`. The templates are in [Pick a template](#pick-a-template).

@@ -24,15 +24,6 @@ Tests 1–23 ran while the module was called `bmod-sdlc` (code `sdlc`). It's now
 
 Tests 10–13 were run on a fresh BMad install from the `main` branch, with the module files taken straight from SETUP-PROMPT.md. In tests 12 and 13, `/bmad` also warned that the test repo had no application code to learn from. That's correct, since the test project was empty.
 
-## No-npm install for Cursor
-
-The commands in [install-bmad-cursor-without-npm.md](install-bmad-cursor-without-npm.md), run directly on macOS rather than through Cursor:
-
-| # | Test | Result |
-|---|---|---|
-| 14 | Clone with `gh`, copy the skills to `.cursor/skills/`, run setup, delete the clone | ✅ 31 skills, no setup questions, `current: true`, no problems |
-| 15 | The same with plain `git clone` | ✅ same result |
-
 ## bmad-ux and Claude Design
 
 One headless `/bmad-ux` run (intent `update`, run Finalize) on a `Workflow: poc` initiative with the forge step done and a small draft DESIGN.md and EXPERIENCE.md. Creative tools were turned on in the request, because bmad-ux leaves them off when headless. The Reviewer Gate and the polish pass were skipped to keep the run short. It took 29 turns, about 8 minutes and $3.35.
@@ -109,14 +100,11 @@ Takes 30–45 minutes, mostly waiting: about 5 for setup, 15–25 for the conver
 
    Three passes and it's done.
 
-**Cursor.** Paste the prompt from [install-bmad-cursor-without-npm.md](install-bmad-cursor-without-npm.md) into Cursor's agent in an empty project, then check that `/bmad` appears in a new chat.
-
 ## Not tested
 
 - Building a Design System from code with built, live component previews. Test 20 used the read-only route.
 - How the published Design System and canvas look on the page. Tests 17–18 checked the files, not the rendering.
-- Harnesses other than Claude Code, including running the Cursor install prompt inside Cursor.
-- The Cursor install on Windows.
+- Harnesses other than Claude Code.
 - A UX Finalize that ends without the Design System publish. In `poc` and `product`, `/bmad` would then send you back to bmad-ux, which runs in Update mode. That's expected, but not tried.
 
 ## Side effects seen
