@@ -4,7 +4,7 @@ Run on throwaway copies of a BMad 6.13.0-next install (core-tools, method, tools
 
 ## Results
 
-Tests 1–23 ran while the module was called `bmod-sdlc` (code `sdlc`). It's now `bmod-claude-design-workflows`.
+Tests 1–23 ran while the module was called `bmod-sdlc` (code `sdlc`). It's now `bmod-claude-design-workflows`. Tests 1–24 installed it with the pasted setup prompt that tests 25–31 replace.
 
 | # | Test | Result |
 |---|---|---|
@@ -22,7 +22,7 @@ Tests 1–23 ran while the module was called `bmod-sdlc` (code `sdlc`). It's now
 | 12 | `/bmad what's next?` on `Workflow: existing` with nothing done | ✅ recommended `bmad-project-context` |
 | 13 | `/bmad what's next?` on `Workflow: existing` with the BMad block in `AGENTS.md` | ✅ recommended building the Design System from the code's styles, not bmad-ux |
 
-Tests 10–13 were run on a fresh BMad install from the `main` branch, with the module files taken straight from SETUP-PROMPT.md. In tests 12 and 13, `/bmad` also warned that the test repo had no application code to learn from. That's correct, since the test project was empty.
+Tests 10–13 were run on a fresh BMad install from the `main` branch, with the module files taken straight from the setup prompt (SETUP-PROMPT.md, since replaced by `skills/`). In tests 12 and 13, `/bmad` also warned that the test repo had no application code to learn from. That's correct, since the test project was empty.
 
 ## bmad-ux and Claude Design
 
@@ -63,6 +63,22 @@ Test 23 found two limits of the canvas: the mockups' styles came across as page-
 |---|---|---|
 | 24 | The renamed prompt, pasted headless into a fresh BMad install, then `/bmad what's next?` on a `poc` initiative with the forge step done | ✅ setup `"problems": []` with `claude-design-workflows` scripts `created`; `knowledge.py` lists `claude-design-workflows`; routing recommended `bmad-ux`, Fast path. On an empty folder, the prompt stopped before step 1 and changed nothing, as its rules say |
 
+## Installed as an npx module (2 Nov)
+
+The module record and the setup skill were moved from the setup prompt into `skills/` and pushed to the `npx-module-test` branch. Each test ran in a fresh folder with a stock BMad install (6.13.0-next). The override text is the prompt's, byte for byte, with a `[claude-design-workflows]` prefix on each entry.
+
+| # | Test | Result |
+|---|---|---|
+| 25 | `npx skills add 'jheyworth/bmad-claude-design-workflows#npx-module-test' --skill bmod-claude-design-workflows -y` | ✅ only the record installed, not the setup skill |
+| 26 | `setup.py` | ✅ `created`, `"problems": []`, `current: true`, `absent_skills: []`; the `post_install_message` is shown |
+| 27 | `knowledge.py` | ✅ `claude-design-workflows` listed in `documents` |
+| 28 | `npx skills use '…#npx-module-test@claude-design-workflows-setup'` | ✅ printed the setup skill from the branch and installed nothing |
+| 29 | That output run headless, with a line asking for setup | ✅ both `_bmad/custom/` files created; `resolve_customization.py` shows each entry once. 6 turns, $0.28 |
+| 30 | A team entry added to each file, then the same run again | ✅ each entry still once, the team entries kept, and the files otherwise byte-identical to test 29's. 5 turns, $0.31 |
+| 31 | Plain `npx skills add` from the branch, without `--skill` | ✅ no problems, but the setup skill is installed too and stays. The Quick start keeps `--skill` for this reason |
+
+Before the branch, a hand-written record listing the setup skill as a member, with that skill not installed, gave `absent_skills: ["claude-design-workflows-setup"]` and `absent_install: "npx skills add jheyworth/bmad-claude-design-workflows --skill claude-design-workflows-setup"`. That's why the setup skill is kept out of the record's `skills` list.
+
 ## To run yourself
 
 These need a person at the keyboard.
@@ -71,7 +87,7 @@ These need a person at the keyboard.
 
 Takes 30–45 minutes, mostly waiting: about 5 for setup, 15–25 for the conversation, and about 10 for Finalize and publishing.
 
-1. Make an empty folder, open Claude Code in it, and paste this. Change the SETUP-PROMPT.md path to where your copy of this repo is.
+1. Make an empty folder, open Claude Code in it, and paste this.
 
    ```text
    Set up a throwaway test project in this folder for testing bmad-ux interactively. Do the setup, then tell me exactly what to type.
@@ -79,7 +95,7 @@ Takes 30–45 minutes, mostly waiting: about 5 for setup, 15–25 for the conver
    1. Install BMad: clone https://github.com/bmad-code-org/BMAD-METHOD.git (depth 1) into .bmad-install-tmp, copy its skills/ folder contents into .claude/skills/, then run:
       uv run --no-cache .claude/skills/bmad/scripts/setup.py --project-root "$PWD" --skill "$PWD/.claude/skills/bmad" --root "$PWD/.claude/skills"
       Then delete .bmad-install-tmp.
-   2. Install the templates: follow every step in /path/to/bmad-claude-design-workflows/SETUP-PROMPT.md (everything below its --- line). Approval is given.
+   2. Install the templates: run `npx skills add jheyworth/bmad-claude-design-workflows --skill bmod-claude-design-workflows -y`, run the setup.py command above again, then run `npx skills use jheyworth/bmad-claude-design-workflows@claude-design-workflows-setup` and follow what it prints. Approval is given.
    3. Create a test initiative called "tally":
       - _bmad/custom/config.user.toml containing [core] and active_initiative = "tally"
       - _bmad-output/tally/tally.md with frontmatter title: Tally, then the line "Workflow: product", then: "Tally lets flatmates log shared bills and see who owes whom, settled monthly."
@@ -101,6 +117,10 @@ Takes 30–45 minutes, mostly waiting: about 5 for setup, 15–25 for the conver
    Three passes and it's done.
 
 ## Not tested
+
+- `/bmad update` finding a new version of the module. Its version check reads `bmod.toml` from GitHub `main`, so on the branch it reports `could-not-check` (404).
+- The `/bmad` agent itself on the new install: tests 25–31 called BMad's scripts directly, so they don't show `/bmad setup` relaying the `post_install_message`.
+- A full template run with the module installed through npx. The help and override text are unchanged from tests 22–24.
 
 - Building a Design System from code with built, live component previews. Test 20 used the read-only route.
 - How the published Design System and canvas look on the page. Tests 17–18 checked the files, not the rendering.
