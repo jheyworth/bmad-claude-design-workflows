@@ -105,7 +105,6 @@ Takes 30–45 minutes, mostly waiting: about 5 for setup, 15–25 for the conver
 
 ## Not tested
 
-- A full interactive run since the Finalize canvas step was added. Test 23 ran that step headless.
 - Building a Design System from code with built, live component previews. Test 20 used the read-only route.
 - How the published Design System and canvas look on the page. Tests 17–18 checked the files, not the rendering.
 - Harnesses other than Claude Code, including running the Cursor install prompt inside Cursor.
