@@ -182,4 +182,3 @@ Always test on a throwaway copy, never in a real project.
 ## Open items
 
 - **Don't use `/design-sync` for the `existing` template's step 2.** It syncs to standalone Claude Design projects (claude.ai/design), which close by 14 December 2026. Use the route tests 20–21 used instead: Claude reads the code and publishes a Design System artifact directly.
-- **Idea:** offer the templates upstream to BMAD-METHOD as a module, once they've been used on a real project.
