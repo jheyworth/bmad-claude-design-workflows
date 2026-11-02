@@ -20,17 +20,15 @@
 
 0. **Check your plan** in [Which Claude plans it works on](#which-claude-plans-it-works-on). On a Claude API plan, everything below still works, but nothing is published to Claude Design.
 1. **Install BMad** in your project: `npx skills add bmad-code-org/BMAD-METHOD --skill '*' -y`, then `/bmad setup`.
-2. **Install the templates:** `npx skills add jheyworth/bmad-claude-design-workflows --skill bmod-claude-design-workflows -y`, then `/bmad setup` again.
-   - Keep `--skill bmod-claude-design-workflows`. Without it, the setup skill from step 3 is installed too and stays installed.
-3. **Add the Claude Design steps** to bmad-ux and Sofia. This runs the setup skill straight from GitHub, without installing it:
+2. **Install the templates:**
 
    ```
-   { npx skills use jheyworth/bmad-claude-design-workflows@claude-design-workflows-setup; echo "Set up Claude Design workflows in this project. Approval to save is given."; } | claude -p --permission-mode acceptEdits --allowedTools "Bash(uv run:*)" "Bash(ls:*)" "Bash(cat:*)"
+   npx skills add jheyworth/bmad-claude-design-workflows --skill bmod-claude-design-workflows -y
    ```
 
-   Run it again whenever the module's version changes. It replaces its own earlier entries and keeps everything else.
-4. **Start an initiative** with `/bmad`, and add a line below its frontmatter naming a template, for example `Workflow: poc`. The templates are in [Pick a template](#pick-a-template).
-5. **Ask `/bmad what's next?`** whenever you finish a step.
+   Then run `/bmad setup` in Claude Code. At the end it asks whether to add the Claude Design steps to bmad-ux and Sofia. Say yes: it shows each file it will change and asks before saving.
+3. **Start an initiative** with `/bmad`, and add a line below its frontmatter naming a template, for example `Workflow: poc`. The templates are in [Pick a template](#pick-a-template).
+4. **Ask `/bmad what's next?`** whenever you finish a step.
 
 **Maintainers:** see [Working on this](#working-on-this) at the bottom.
 
@@ -136,7 +134,7 @@ The Claude Design steps publish claude.ai artifacts. Artifacts are built into Cl
   - **Every entry starts with `[claude-design-workflows]`**, so you can see which lines came from this module.
 - **Everything else stays the same**
   - **No BMad skill is edited**, and BMad updates don't remove the templates.
-  - **`/bmad update` updates the templates** along with BMad. It doesn't touch the override files, so re-run step 3 of [Quick start](#quick-start) when the module's version changes.
+  - **`/bmad update` updates the templates** along with BMad. It doesn't touch the override files itself. When the module's version changes, it asks again whether to update the Claude Design steps; say yes.
   - **bmad-ux still shows options as local HTML pages** while you design.
 
 ## What's been tested
@@ -220,7 +218,7 @@ Paths are inside a BMad install (`.claude/skills/` or `.agents/skills/`).
 Always test on a throwaway copy, never in a real project.
 
 1. **Push the change to a branch**, then make a fresh BMad install in a temporary folder (`npx skills add bmad-code-org/BMAD-METHOD -y`). Run `git init` and commit, so you can see what changes.
-2. **Install from the branch:** `npx skills add 'jheyworth/bmad-claude-design-workflows#<branch>' --skill bmod-claude-design-workflows -y`, then run [Quick start](#quick-start) step 3 with `#<branch>` after the repo name, before `@`.
+2. **Install from the branch:** `npx skills add 'jheyworth/bmad-claude-design-workflows#<branch>' --skill bmod-claude-design-workflows -y`, then run `npx skills use 'jheyworth/bmad-claude-design-workflows#<branch>@claude-design-workflows-setup'` and follow what it prints. `/bmad setup`'s offer uses `main`, so on a branch run the setup skill this way.
 3. **Check setup:** `uv run _bmad/scripts/setup.py --project-root . --skill .claude/skills/bmad --root .claude/skills --status` must show `"problems": []`.
 4. **Check the overrides:** `uv run _bmad/scripts/resolve_customization.py --skill .claude/skills/bmad-ux --project-root . --key workflow` must show each `[claude-design-workflows]` entry once. Run step 2's setup command again and check it still does.
 5. **Check the help is found:** `uv run _bmad/scripts/knowledge.py --root .claude/skills` must list `claude-design-workflows`.
