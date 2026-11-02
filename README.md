@@ -2,6 +2,17 @@
 
 **One setup prompt turns a standard BMad install into a guided product workflow.** You pick a template, `/bmad what's next?` walks you through it step by step, and the product's look is published to Claude Design for every later step to build on.
 
+## Quick start
+
+1. **Install BMad** in your project: `npx skills add bmad-code-org/BMAD-METHOD --skill '*' -y`, then `/bmad setup`.
+   - **Without npm:** for Cursor, use [install-bmad-cursor-without-npm.md](install-bmad-cursor-without-npm.md).
+   - **For the Claude Design steps:** you also need the claude.ai artifacts connector in Claude Code. Without it, `/bmad` still follows the route, but those steps can't make anything.
+2. **Paste the setup prompt.** Open Claude Code in the project and paste everything below the line in [SETUP-PROMPT.md](SETUP-PROMPT.md).
+3. **Start an initiative** with `/bmad`, and add a line below its frontmatter naming a template, for example `Workflow: poc`. The templates are in [Pick a template](#pick-a-template).
+4. **Ask `/bmad what's next?`** whenever you finish a step.
+
+**Maintainers:** see [Working on this](#working-on-this) at the bottom.
+
 ## The problem it solves
 
 - **Standard BMad leaves the route to you**
@@ -71,16 +82,6 @@ Using `product` as the example:
 - **Some steps are Claude, not a BMad skill**
   - **Which ones:** the Design System from code (`existing`), the first Design System and canvas (`design-led`), and the Slides deck.
   - **How they run:** `/bmad` routes you to them like any other step. Claude makes the artifact and saves its link where the step says.
-
-## Get started
-
-- **You need**
-  - **BMad**, installed with `npx skills add bmad-code-org/BMAD-METHOD --skill '*' -y`, then `/bmad setup`. Without npm, use [install-bmad-cursor-without-npm.md](install-bmad-cursor-without-npm.md) for Cursor.
-  - **The claude.ai artifacts connector in Claude Code.** Without it, `/bmad` still follows the route, but the Claude Design steps can't make anything.
-- **Then**
-  1. **Paste the setup prompt.** Open Claude Code in the project and paste everything below the line in [SETUP-PROMPT.md](SETUP-PROMPT.md).
-  2. **Start an initiative** with `/bmad` and add a line below its frontmatter, for example `Workflow: poc`.
-  3. **Ask `/bmad what's next?`** whenever you finish a step.
 
 ## What it changes in your project
 
