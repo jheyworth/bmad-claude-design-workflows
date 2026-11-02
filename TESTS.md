@@ -121,6 +121,10 @@ The setup skill is gone. Its overrides are now `migration-1.toml` in the module 
 
 No permission prompt came up: nothing is fetched from outside the project.
 
+| # | Test | Result |
+|---|---|---|
+| 44 | 0.6.1: the record's `SKILL.md` gets `user-invocable: false` and `disable-model-invocation: true`. Fresh install from the `hide-record` branch | ✅ `bmod-claude-design-workflows` is in neither `slash_commands` nor `skills` of Claude Code's startup event (BMad's own `bmod-*` records still are). Setup `"problems": []` at 0.6.1, `knowledge.py` still lists the help and the migration, and `validate_manifests.py` passes |
+
 Before the branch, a hand-written record listing the setup skill as a member, with that skill not installed, gave `absent_skills: ["claude-design-workflows-setup"]` and `absent_install: "npx skills add jheyworth/bmad-claude-design-workflows --skill claude-design-workflows-setup"`. That's why the setup skill is kept out of the record's `skills` list.
 
 ## To run yourself
