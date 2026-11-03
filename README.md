@@ -4,6 +4,10 @@
 
 ## TL;DR
 
+- **What's different from standard bmad-ux**
+  - **Standard:** DESIGN.md, EXPERIENCE.md and HTML mockups on your machine. Nothing is published.
+  - **Claude Design workflows:** the same, then published to Claude Design as a Design System and a canvas of the key screens.
+  - **Result:** a design others can see and comment on, and every later step uses it. [Full comparison](#standard-bmad-ux-vs-claude-design-workflows)
 - **Claude Design System**
   - Your design is published as a Claude Design System when bmad-ux finishes.
   - Colours, type, spacing and components, with live previews.
